@@ -1,0 +1,9 @@
+{
+  "name": "airliners-api",
+  "description": "Airliners.net API",
+  "author": "Andrei Senchuk <taviscaron@yandex.ru>",
+  "dependencies": {
+    "cheerio": "*",
+    "router": "*"
+  }
+}
