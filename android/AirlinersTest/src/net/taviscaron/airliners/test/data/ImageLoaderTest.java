@@ -21,15 +21,17 @@ public class ImageLoaderTest extends InstrumentationTestCase {
 
     @Override
     protected void setUp() throws Exception {
-        Context context = getInstrumentation().getContext();
-        cacheBaseDir = new File(context.getExternalCacheDir(), CACHE_TAG);
+        Context testContext = getInstrumentation().getContext();
+        Context targetContext = getInstrumentation().getTargetContext();
+
+        cacheBaseDir = new File(targetContext.getExternalCacheDir(), CACHE_TAG);
 
         // clean cache dir
         TestUtil.deleteRecursively(cacheBaseDir);
         Assert.assertFalse("cache directory should be empty on test starting", cacheBaseDir.exists());
 
-        URLStreamHandler urlStreamHandler = new MockURLStreamHandler(context);
-        imageLoader = new ImageLoader(context, CACHE_TAG, urlStreamHandler);
+        URLStreamHandler urlStreamHandler = new MockURLStreamHandler(testContext);
+        imageLoader = new ImageLoader(targetContext, CACHE_TAG, urlStreamHandler);
         Assert.assertTrue("cache directory should be created on ImageLoader instantiating", cacheBaseDir.exists());
     }
 

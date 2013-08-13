@@ -25,7 +25,7 @@ public class ImageLoader {
     private static final String TAG = "ImageLoader";
     private static final ExecutorService executor = Executors.newCachedThreadPool();
     private static final Object lock = new Object();
-    private static final Set<String>loadedUrls = new HashSet<String>();
+    private static final Set<String> loadedUrls = new HashSet<String>();
 
     public static final String THUMB_CACHE_TAG = "thumb";
     public static final String IMAGE_CACHE_TAG = "image";
@@ -33,7 +33,7 @@ public class ImageLoader {
     private final Context context;
     private final String cacheBaseDir;
     private final Handler handler;
-    private final URLStreamHandler urlStreamHandlert;
+    private final URLStreamHandler urlStreamHandler;
 
     public static interface ImageLoaderCallback {
         public void imageLoaded(ImageLoader loader, String url, Bitmap bitmap);
@@ -45,11 +45,11 @@ public class ImageLoader {
         this(context, cacheTag, null);
     }
 
-    public ImageLoader(Context context, String cacheTag, URLStreamHandler urlStreamHandlert) {
+    public ImageLoader(Context context, String cacheTag, URLStreamHandler urlStreamHandler) {
         this.context = context.getApplicationContext();
         this.cacheBaseDir = context.getExternalCacheDir().getAbsolutePath() + File.separatorChar + cacheTag;
         this.handler = new Handler(Looper.getMainLooper());
-        this.urlStreamHandlert = urlStreamHandlert;
+        this.urlStreamHandler = urlStreamHandler;
 
         File cacheBaseFile = new File(cacheBaseDir);
         if(!cacheBaseFile.exists()) {
@@ -114,7 +114,7 @@ public class ImageLoader {
                 InputStream is = null;
                 OutputStream os = null;
                 try {
-                    URL connectionUrl = new URL(null, url, urlStreamHandlert);
+                    URL connectionUrl = new URL(null, url, urlStreamHandler);
                     HttpURLConnection connection = (HttpURLConnection)connectionUrl.openConnection();
 
                     if(connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
@@ -131,10 +131,12 @@ public class ImageLoader {
                     IOUtil.close(os);
                 }
             }
+
             synchronized (lock) {
                 loadedUrls.remove(url);
                 lock.notifyAll();
             }
+
             final Bitmap result = (bitmapFile.exists()) ? BitmapFactory.decodeFile(bitmapFile.getAbsolutePath()) : null;
 
             handler.post(new Runnable() {

@@ -23,9 +23,13 @@ public class MockURLStreamHandler extends URLStreamHandler {
         this.context = context;
     }
 
+    protected File fileForURL(URL url) {
+        return new File(url.getHost(), url.getPath());
+    }
+
     @Override
     protected URLConnection openConnection(URL url) throws IOException {
-        final File file = new File(url.getHost(), url.getPath());
+        final File file = fileForURL(url);
         final String filename = file.getName();
         final String directory = file.getParent();
         return new HttpURLConnection(url) {

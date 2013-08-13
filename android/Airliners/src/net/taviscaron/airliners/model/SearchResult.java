@@ -71,7 +71,7 @@ public class SearchResult implements Iterable<AircraftSearchResult> {
             @Override
             public void remove() {
                 throw new UnsupportedOperationException("Removing items from the search result is unsupported");
-            };
+            }
         };
     }
 }
