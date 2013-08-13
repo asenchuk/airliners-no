@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import net.taviscaron.airliners.network.URLConnectionFactory;
 import net.taviscaron.airliners.util.IOUtil;
 
 import java.io.*;
@@ -32,6 +33,7 @@ public class ImageLoader {
     private final Context context;
     private final String cacheBaseDir;
     private final Handler handler;
+    private final URLConnectionFactory connectionFactory;
 
     public static interface ImageLoaderCallback {
         public void imageLoaded(ImageLoader loader, String url, Bitmap bitmap);
@@ -40,9 +42,14 @@ public class ImageLoader {
     }
 
     public ImageLoader(Context context, String cacheTag) {
+        this(context, cacheTag, URLConnectionFactory.DEFAULT_FACTORY);
+    }
+
+    public ImageLoader(Context context, String cacheTag, URLConnectionFactory connectionFactory) {
         this.context = context.getApplicationContext();
         this.cacheBaseDir = context.getExternalCacheDir().getAbsolutePath() + File.separatorChar + cacheTag;
         this.handler = new Handler(Looper.getMainLooper());
+        this.connectionFactory = connectionFactory;
 
         File cacheBaseFile = new File(cacheBaseDir);
         if(!cacheBaseFile.exists()) {
@@ -108,7 +115,7 @@ public class ImageLoader {
                 OutputStream os = null;
                 try {
                     URL connectionUrl = new URL(url);
-                    HttpURLConnection connection = (HttpURLConnection)connectionUrl.openConnection();
+                    HttpURLConnection connection = (HttpURLConnection)connectionFactory.openConnection(connectionUrl);
 
                     if(connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
                         is = connection.getInputStream();

@@ -16,7 +16,7 @@ public class IOUtil {
     public static final int DEFAULT_BUFFER_SIZE = 1024;
 
     public static void copy(InputStream in, OutputStream out, int bufferSize) throws IOException {
-        byte buffer[] = new byte[bufferSize];
+        byte[] buffer = new byte[bufferSize];
 
         int len;
         while((len = in.read(buffer)) != -1) {

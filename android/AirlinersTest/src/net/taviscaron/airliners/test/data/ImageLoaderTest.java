@@ -6,6 +6,8 @@ import android.os.Looper;
 import android.test.InstrumentationTestCase;
 import junit.framework.Assert;
 import net.taviscaron.airliners.data.ImageLoader;
+import net.taviscaron.airliners.network.URLConnectionFactory;
+import net.taviscaron.airliners.test.mocks.MockURLConnectionFactory;
 import net.taviscaron.airliners.test.util.TestUtil;
 
 import java.io.File;
@@ -26,13 +28,14 @@ public class ImageLoaderTest extends InstrumentationTestCase {
         TestUtil.deleteRecursively(cacheBaseDir);
         Assert.assertFalse("cache directory should be empty on test starting", cacheBaseDir.exists());
 
-        imageLoader = new ImageLoader(context, CACHE_TAG);
+        URLConnectionFactory connectionFactory = new MockURLConnectionFactory(context);
+        imageLoader = new ImageLoader(context, CACHE_TAG, connectionFactory);
         Assert.assertTrue("cache directory should be created on ImageLoader instantiating", cacheBaseDir.exists());
     }
 
     public void testImageLoading() throws Exception {
-        final String expectedUrl = "http://cdn-www.airliners.net/aviation-photos/photos/0/0/1/2246100.jpg";
-        final String expectedFileName = "2246100.jpg";
+        final String expectedUrl = "http://example.com/red.png";
+        final String expectedFileName = "red.png";
         final File file = new File(cacheBaseDir, expectedFileName);
 
         Assert.assertFalse("Cached file should not exist", file.exists());
@@ -106,7 +109,7 @@ public class ImageLoaderTest extends InstrumentationTestCase {
 
     public void testFailedImageLoading() throws Exception {
         final CountDownLatch cdl = new CountDownLatch(1);
-        imageLoader.loadImage("http://localhost/non-existent-file.jpg", new ImageLoader.ImageLoaderCallback() {
+        imageLoader.loadImage("http://example.com/non-existent-file", new ImageLoader.ImageLoaderCallback() {
             boolean loadFromNetworkCalled = false;
 
             @Override
@@ -134,41 +137,14 @@ public class ImageLoaderTest extends InstrumentationTestCase {
     }
 
     public void testConcurrentLoading() throws Exception {
-        final String expectedUrl = "http://cdn-www.airliners.net/aviation-photos/photos/1/6/1/2289161.jpg";
+        loadedBitmap = null;
         int concurrentCount = 10;
 
-        loadedBitmap = null;
-
-        final CountDownLatch cdl = new CountDownLatch(concurrentCount + 1);
-        imageLoader.loadImage(expectedUrl, new ImageLoader.ImageLoaderCallback() {
-            boolean loadFromNetworkCalled = false;
-
-            @Override
-            public void imageLoaded(ImageLoader loader, String url, Bitmap bitmap) {
-                Assert.assertNotNull(bitmap);
-                Assert.assertTrue("Load from network should be called for first load", loadFromNetworkCalled);
-                if(loadedBitmap != null) {
-                    Assert.assertTrue("Loaded bitmaps should be same", loadedBitmap.sameAs(bitmap));
-                } else {
-                    loadedBitmap = bitmap;
-                }
-                cdl.countDown();
-            }
-
-            @Override
-            public void imageLoadFailed(ImageLoader loader, String url) {
-                Assert.fail("Load should not be failed");
-                cdl.countDown();
-            }
-
-            @Override
-            public void imageLoadFromNetworkStarted(ImageLoader loader, String url) {
-                loadFromNetworkCalled = true;
-            }
-        });
-
+        final CountDownLatch cdl = new CountDownLatch(concurrentCount);
         for(int i = 0; i < concurrentCount; i++) {
-            imageLoader.loadImage(expectedUrl, new ImageLoader.ImageLoaderCallback() {
+            imageLoader.loadImage("http://example.com/blue.png", new ImageLoader.ImageLoaderCallback() {
+                boolean loadFromNetworkCalled = false;
+
                 @Override
                 public void imageLoaded(ImageLoader loader, String url, Bitmap bitmap) {
                     Assert.assertNotNull(bitmap);
@@ -188,11 +164,14 @@ public class ImageLoaderTest extends InstrumentationTestCase {
 
                 @Override
                 public void imageLoadFromNetworkStarted(ImageLoader loader, String url) {
-                    Assert.fail("Image load from network started should not be called for concurrent loads");
+                    if(loadFromNetworkCalled) {
+                        Assert.fail("Image load from network started should not be called more 1 time");
+                    } else {
+                        loadFromNetworkCalled = true;
+                    }
                 }
             });
         }
-
         cdl.await();
     }
 }
