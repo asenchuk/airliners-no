@@ -6,13 +6,13 @@ import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
-import net.taviscaron.airliners.network.URLConnectionFactory;
 import net.taviscaron.airliners.util.IOUtil;
 
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLStreamHandler;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
@@ -33,7 +33,7 @@ public class ImageLoader {
     private final Context context;
     private final String cacheBaseDir;
     private final Handler handler;
-    private final URLConnectionFactory connectionFactory;
+    private final URLStreamHandler urlStreamHandlert;
 
     public static interface ImageLoaderCallback {
         public void imageLoaded(ImageLoader loader, String url, Bitmap bitmap);
@@ -42,14 +42,14 @@ public class ImageLoader {
     }
 
     public ImageLoader(Context context, String cacheTag) {
-        this(context, cacheTag, URLConnectionFactory.DEFAULT_FACTORY);
+        this(context, cacheTag, null);
     }
 
-    public ImageLoader(Context context, String cacheTag, URLConnectionFactory connectionFactory) {
+    public ImageLoader(Context context, String cacheTag, URLStreamHandler urlStreamHandlert) {
         this.context = context.getApplicationContext();
         this.cacheBaseDir = context.getExternalCacheDir().getAbsolutePath() + File.separatorChar + cacheTag;
         this.handler = new Handler(Looper.getMainLooper());
-        this.connectionFactory = connectionFactory;
+        this.urlStreamHandlert = urlStreamHandlert;
 
         File cacheBaseFile = new File(cacheBaseDir);
         if(!cacheBaseFile.exists()) {
@@ -114,8 +114,8 @@ public class ImageLoader {
                 InputStream is = null;
                 OutputStream os = null;
                 try {
-                    URL connectionUrl = new URL(url);
-                    HttpURLConnection connection = (HttpURLConnection)connectionFactory.openConnection(connectionUrl);
+                    URL connectionUrl = new URL(null, url, urlStreamHandlert);
+                    HttpURLConnection connection = (HttpURLConnection)connectionUrl.openConnection();
 
                     if(connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
                         is = connection.getInputStream();

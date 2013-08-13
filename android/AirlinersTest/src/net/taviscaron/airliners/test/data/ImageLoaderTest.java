@@ -6,11 +6,11 @@ import android.os.Looper;
 import android.test.InstrumentationTestCase;
 import junit.framework.Assert;
 import net.taviscaron.airliners.data.ImageLoader;
-import net.taviscaron.airliners.network.URLConnectionFactory;
-import net.taviscaron.airliners.test.mocks.MockURLConnectionFactory;
+import net.taviscaron.airliners.test.mocks.MockURLStreamHandler;
 import net.taviscaron.airliners.test.util.TestUtil;
 
 import java.io.File;
+import java.net.URLStreamHandler;
 import java.util.concurrent.CountDownLatch;
 
 public class ImageLoaderTest extends InstrumentationTestCase {
@@ -28,8 +28,8 @@ public class ImageLoaderTest extends InstrumentationTestCase {
         TestUtil.deleteRecursively(cacheBaseDir);
         Assert.assertFalse("cache directory should be empty on test starting", cacheBaseDir.exists());
 
-        URLConnectionFactory connectionFactory = new MockURLConnectionFactory(context);
-        imageLoader = new ImageLoader(context, CACHE_TAG, connectionFactory);
+        URLStreamHandler urlStreamHandler = new MockURLStreamHandler(context);
+        imageLoader = new ImageLoader(context, CACHE_TAG, urlStreamHandler);
         Assert.assertTrue("cache directory should be created on ImageLoader instantiating", cacheBaseDir.exists());
     }
 

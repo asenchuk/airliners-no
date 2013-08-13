@@ -1,7 +1,6 @@
 package net.taviscaron.airliners.test.mocks;
 
 import android.content.Context;
-import net.taviscaron.airliners.network.URLConnectionFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -9,22 +8,23 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.URLStreamHandler;
 import java.util.Arrays;
 
 /**
- * Mocked URLConnectionFactory. Returns HttpURLConnections which is
+ * Mocked URLStreamHandler. Returns HttpURLConnections which is
  * pointed to asset with following path: [host]/path/to/resource
  * @author Andrei Senchuk
  */
-public class MockURLConnectionFactory extends URLConnectionFactory {
+public class MockURLStreamHandler extends URLStreamHandler {
     private Context context;
 
-    public MockURLConnectionFactory(Context context) {
+    public MockURLStreamHandler(Context context) {
         this.context = context;
     }
 
     @Override
-    public URLConnection openConnection(URL url) throws IOException {
+    protected URLConnection openConnection(URL url) throws IOException {
         final File file = new File(url.getHost(), url.getPath());
         final String filename = file.getName();
         final String directory = file.getParent();
