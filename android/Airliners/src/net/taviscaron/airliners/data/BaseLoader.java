@@ -60,24 +60,27 @@ public abstract class BaseLoader<T> {
     protected String requestURLFromParams(Object param) {
         @SuppressWarnings("unchecked")
         Map<String, Object> params = (Map<String, Object>)param;
-
-        StringBuilder sb = new StringBuilder();
-        for(String key : params.keySet()) {
-            String value = params.get(key).toString();
-
-            if(sb.length() == 0) {
-                sb.append((baseUrl.contains("?")) ? '&' : '?');
-            }
-
-            sb.append(String.format("%s=%s", key, value));
-        }
-
         String url = baseUrl;
 
-        try {
-            url += URLEncoder.encode(sb.toString(), "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            // noop
+        if(params != null) {
+            StringBuilder sb = new StringBuilder();
+            for(String key : params.keySet()) {
+                String value = params.get(key).toString();
+
+                if(sb.length() == 0) {
+                    sb.append((baseUrl.contains("?")) ? '&' : '?');
+                }
+
+                try {
+                    key = URLEncoder.encode(key, "UTF-8");
+                    value = URLEncoder.encode(value, "UTF-8");
+                    sb.append(String.format("%s=%s", key, value));
+                } catch (UnsupportedEncodingException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
+            url += sb;
         }
 
         return url;
