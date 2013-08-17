@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Airliners</string>
+
+    <!-- tabs -->
+    <string name="tab_top15_title">TOP 15</string>
+    <string name="tab_top_title">TOP</string>
 </resources>

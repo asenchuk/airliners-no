@@ -1,33 +1,48 @@
 package net.taviscaron.airliners.activities;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
-import net.taviscaron.airliners.data.ImageLoader;
-import net.taviscaron.airliners.fragments.FirstFragment;
-import net.taviscaron.airliners.fragments.SecondFragment;
+import net.taviscaron.airliners.R;
+import net.taviscaron.airliners.fragments.SearchResultsFragment;
 import net.taviscaron.airliners.util.TabUtil;
 
 public class MainActivity extends SherlockFragmentActivity {
-    private ImageLoader imageLoader;
+    private static final String TOP15_TAB_TAG = "top15";
+    private static final String TOP_TAB_TAG = "top";
+    private static final String SAVED_TAB_KEY = "savedTab";
 
-    /**
-     * Called when the activity is first created.
-     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //setContentView(R.layout.main);
-
         ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
-        TabUtil.addFragmentTab(this, "First", "first", FirstFragment.class);
-        TabUtil.addFragmentTab(this, "Second", "second", SecondFragment.class);
+        TabUtil.addFragmentTab(this, R.string.tab_top15_title,  TOP15_TAB_TAG, new TabUtil.FragmentCreator() {
+            @Override
+            public Fragment createFragment() {
+                return new SearchResultsFragment(SearchResultsFragment.LoaderType.TOP15);
+            }
+        });
 
-        imageLoader = new ImageLoader(this, ImageLoader.IMAGE_CACHE_TAG);
+        TabUtil.addFragmentTab(this, R.string.tab_top_title, TOP_TAB_TAG, new TabUtil.FragmentCreator() {
+            @Override
+            public Fragment createFragment() {
+                return new SearchResultsFragment(SearchResultsFragment.LoaderType.TOP);
+            }
+        });
 
+        if(savedInstanceState != null) {
+            int selectedTab = savedInstanceState.getInt(SAVED_TAB_KEY, 0);
+            actionBar.getTabAt(selectedTab).select();
+        }
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(SAVED_TAB_KEY, getSupportActionBar().getSelectedTab().getPosition());
+    }
 }

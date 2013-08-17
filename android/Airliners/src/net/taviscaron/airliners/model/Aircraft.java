@@ -1,10 +1,12 @@
 package net.taviscaron.airliners.model;
 
+import java.io.Serializable;
+
 /**
  * Aircraft base entity class
  * @author Andrei Senchuk
  */
-public class Aircraft {
+public class Aircraft implements Serializable {
     protected String id;
     protected String aircraft;
     protected String airline;

@@ -1,12 +1,13 @@
 package net.taviscaron.airliners.model;
 
+import java.io.Serializable;
 import java.util.Iterator;
 
 /**
  * Search result entity class
  * @author Andrei Senchuk
  */
-public class SearchResult implements Iterable<AircraftSearchResult> {
+public class SearchResult implements Serializable, Iterable<AircraftSearchResult> {
     protected long from;
     protected long to;
     protected long total;
