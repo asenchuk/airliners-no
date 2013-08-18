@@ -14,7 +14,6 @@ import net.taviscaron.airliners.data.ImageLoader;
 import net.taviscaron.airliners.model.AircraftSearchResult;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -56,7 +55,12 @@ public class SearchResultsAdapter extends BaseAdapter {
             ViewHolder holder = new ViewHolder();
             holder.imageLoadingProgressBar = (ProgressBar)view.findViewById(R.id.aircraft_search_result_item_image_progress);
             holder.imageView = (ImageView)view.findViewById(R.id.aircraft_search_result_item_image);
-            holder.titleView = (TextView)view.findViewById(R.id.aircraft_search_result_list_item_title);
+            holder.aircraftLabel = (TextView)view.findViewById(R.id.aircraft_search_result_item_aircraft);
+            holder.airlineLabel = (TextView)view.findViewById(R.id.aircraft_search_result_item_airline);
+            holder.regLabel = (TextView)view.findViewById(R.id.aircraft_search_result_item_registration);
+            holder.authorLabel = (TextView)view.findViewById(R.id.aircraft_search_result_item_author);
+            holder.placeLabel = (TextView)view.findViewById(R.id.aircraft_search_result_item_place);
+            holder.countryDateLabel = (TextView)view.findViewById(R.id.aircraft_search_result_item_country_date);
 
             view.setTag(holder);
         }
@@ -65,8 +69,20 @@ public class SearchResultsAdapter extends BaseAdapter {
 
         AircraftSearchResult result = getItem(position);
 
-        holder.titleView.setText(String.format("%s %s", result.getAirline(), result.getAircraft()));
         holder.imageLoadingProgressBar.setVisibility(View.GONE);
+
+        // attributes
+        updateTextViewValue(holder.aircraftLabel, result.getAircraft());
+        updateTextViewValue(holder.airlineLabel, result.getAirline());
+        updateTextViewValue(holder.regLabel, result.getReg());
+        updateTextViewValue(holder.authorLabel, result.getAuthor());
+        updateTextViewValue(holder.placeLabel, result.getPlace());
+
+        if(result.getCountry() != null && result.getDate() != null) {
+            updateTextViewValue(holder.countryDateLabel, String.format("%s, %s", result.getCountry(), result.getDate()));
+        } else {
+            updateTextViewValue(holder.countryDateLabel, null);
+        }
 
         imageLoader.loadImage(result.getThumbUrl(), new ImageLoader.ImageLoaderCallback() {
             @Override
@@ -91,6 +107,15 @@ public class SearchResultsAdapter extends BaseAdapter {
         return view;
     }
 
+    private void updateTextViewValue(TextView textView, String value) {
+        if(value == null || value.isEmpty()) {
+            textView.setVisibility(View.GONE);
+        } else {
+            textView.setVisibility(View.VISIBLE);
+            textView.setText(value);
+        }
+    }
+
     public void addAll(List<AircraftSearchResult> newResults) {
         results.addAll(newResults);
         notifyDataSetChanged();
@@ -99,6 +124,11 @@ public class SearchResultsAdapter extends BaseAdapter {
     private static class ViewHolder {
         ProgressBar imageLoadingProgressBar;
         ImageView imageView;
-        TextView titleView;
+        TextView aircraftLabel;
+        TextView airlineLabel;
+        TextView regLabel;
+        TextView authorLabel;
+        TextView placeLabel;
+        TextView countryDateLabel;
     }
 }

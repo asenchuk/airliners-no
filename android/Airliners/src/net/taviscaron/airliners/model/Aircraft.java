@@ -61,4 +61,25 @@ public class Aircraft implements Serializable {
     public void setCode(String code) {
         this.code = code;
     }
+
+    public String fullReg() {
+        StringBuilder sb = new StringBuilder();
+
+        if(reg != null) {
+            sb.append(reg);
+        }
+
+        if(code != null) {
+            if(sb.length() > 0) {
+                sb.append(" / ");
+            }
+            sb.append(code);
+        }
+
+        if(cn != null) {
+            sb.append(String.format("(cn %s)", cn));
+        }
+
+        return sb.toString();
+    }
 }

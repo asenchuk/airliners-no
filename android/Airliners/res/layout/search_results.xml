@@ -13,7 +13,10 @@
                 android:id="@+id/search_results_list_view"
                 android:layout_height="match_parent"
                 android:layout_width="match_parent"
-                android:listSelector="@android:color/transparent"/>
+                android:listSelector="@android:color/transparent"
+                android:cacheColorHint="@android:color/transparent"
+                android:divider="@android:color/transparent"
+                android:dividerHeight="3dp"/>
 
         <ProgressBar
                 android:id="@+id/search_progress_view"

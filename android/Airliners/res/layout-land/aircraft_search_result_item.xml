@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="horizontal"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              android:paddingTop="10dp"
+              android:paddingBottom="10dp">
+
+    <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="1">
+
+        <ImageView
+                android:id="@+id/aircraft_search_result_item_image"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center"
+                android:scaleType="centerCrop"/>
+
+        <ProgressBar
+                android:id="@+id/aircraft_search_result_item_image_progress"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_gravity="center"/>
+
+    </FrameLayout>
+
+    <LinearLayout
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginLeft="3dp">
+
+        <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                android:layout_marginBottom="2dp"
+                android:text="@string/aircraft_item_aircraft_group_title"
+                style="@style/AircraftItemAttributesGroupHeader"/>
+
+        <TextView
+                android:id="@+id/aircraft_search_result_item_airline"
+                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                style="@style/AircraftItemAttributeText"/>
+
+        <TextView
+                android:id="@+id/aircraft_search_result_item_registration"
+                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                style="@style/AircraftItemAttributeText"/>
+
+        <TextView
+                android:id="@+id/aircraft_search_result_item_aircraft"
+                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                style="@style/AircraftItemAttributeText"/>
+
+        <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                android:text="@string/aircraft_item_location_date_group_title"
+                style="@style/AircraftItemAttributesGroupHeader"/>
+
+        <TextView
+                android:id="@+id/aircraft_search_result_item_place"
+                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                style="@style/AircraftItemAttributeText"/>
+
+        <TextView
+                android:id="@+id/aircraft_search_result_item_country_date"
+                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                style="@style/AircraftItemAttributeText"/>
+
+        <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                android:text="@string/aircraft_item_author_group_title"
+                style="@style/AircraftItemAttributesGroupHeader"/>
+
+        <TextView
+                android:id="@+id/aircraft_search_result_item_author"
+                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                style="@style/AircraftItemAttributeText"/>
+
+    </LinearLayout>
+
+</LinearLayout>

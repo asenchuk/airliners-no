@@ -5,4 +5,9 @@
     <!-- tabs -->
     <string name="tab_top15_title">TOP 15</string>
     <string name="tab_top_title">TOP</string>
+
+    <!-- search item -->
+    <string name="aircraft_item_aircraft_group_title">Aircraft</string>
+    <string name="aircraft_item_location_date_group_title">Location &amp; Date</string>
+    <string name="aircraft_item_author_group_title">Author</string>
 </resources>
