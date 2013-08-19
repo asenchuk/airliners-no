@@ -10,6 +10,7 @@ import net.taviscaron.airliners.R;
 import net.taviscaron.airliners.adapters.SearchResultsAdapter;
 import net.taviscaron.airliners.data.BaseLoader;
 import net.taviscaron.airliners.data.SearchLoader;
+import net.taviscaron.airliners.model.AircraftSearchResult;
 import net.taviscaron.airliners.model.SearchResult;
 
 import java.util.Arrays;
@@ -25,6 +26,10 @@ public class SearchResultsFragment extends Fragment {
 
     public enum LoaderType {
         TOP15, TOP, SEARCH
+    }
+
+    public interface OnShowAircraftInfoListener {
+        public void showAircraftInfo(String id);
     }
 
     private LoaderType loaderType;
@@ -48,6 +53,15 @@ public class SearchResultsFragment extends Fragment {
         }
     };
 
+    private final SearchResultsAdapter.SearchResultsAdapterListener searchResultsAdapterListener = new SearchResultsAdapter.SearchResultsAdapterListener() {
+        @Override
+        public void searchResultItemThumbClicked(AircraftSearchResult result, int position) {
+            if(result.getId() != null && getActivity() instanceof  OnShowAircraftInfoListener) {
+                ((OnShowAircraftInfoListener)getActivity()).showAircraftInfo(result.getId());
+            }
+        }
+    };
+
     public SearchResultsFragment() {
         // noop; need for instantiation by the system
     }
@@ -60,7 +74,7 @@ public class SearchResultsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        adapter = new SearchResultsAdapter(getActivity());
+        adapter = new SearchResultsAdapter(getActivity(), searchResultsAdapterListener);
 
         if(savedInstanceState != null) {
             loaderType = LoaderType.values()[savedInstanceState.getInt(LOADER_TYPE_KEY, LoaderType.SEARCH.ordinal())];

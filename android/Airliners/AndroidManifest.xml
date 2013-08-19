@@ -16,11 +16,17 @@
             android:theme="@style/Theme.Sherlock">
 
         <activity
-                android:label="@string/app_name"
                 android:name=".activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity
+                android:name=".activities.AircraftInfoActivity">
+            <intent-filter>
+                <action android:name="net.taviscaron.airliners.AIRCRAFT_INFO"/>
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
     </application>

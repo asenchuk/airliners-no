@@ -1,5 +1,6 @@
 package net.taviscaron.airliners.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import com.actionbarsherlock.app.ActionBar;
@@ -8,7 +9,7 @@ import net.taviscaron.airliners.R;
 import net.taviscaron.airliners.fragments.SearchResultsFragment;
 import net.taviscaron.airliners.util.TabUtil;
 
-public class MainActivity extends SherlockFragmentActivity {
+public class MainActivity extends SherlockFragmentActivity implements SearchResultsFragment.OnShowAircraftInfoListener {
     private static final String TOP15_TAB_TAG = "top15";
     private static final String TOP_TAB_TAG = "top";
     private static final String SAVED_TAB_KEY = "savedTab";
@@ -44,5 +45,10 @@ public class MainActivity extends SherlockFragmentActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(SAVED_TAB_KEY, getSupportActionBar().getSelectedTab().getPosition());
+    }
+
+    @Override
+    public void showAircraftInfo(String id) {
+        startActivity(new Intent(AircraftInfoActivity.AIRCRAFT_INFO_ACTION).putExtra(AircraftInfoActivity.AIRCRAFT_ID_KEY, id));
     }
 }

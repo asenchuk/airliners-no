@@ -10,4 +10,15 @@
     <string name="aircraft_item_aircraft_group_title">Aircraft</string>
     <string name="aircraft_item_location_date_group_title">Location &amp; Date</string>
     <string name="aircraft_item_author_group_title">Author</string>
+
+    <!-- aircraft info -->
+    <string name="aircraft_info_photo_title">Photo</string>
+    <string name="aircraft_info_airline_title">Airline</string>
+    <string name="aircraft_info_aircraft_title">Aircraft</string>
+    <string name="aircraft_info_taken_at_title">Taken At</string>
+    <string name="aircraft_info_taken_on_title">Taken On</string>
+    <string name="aircraft_info_reg_title">Registration</string>
+    <string name="aircraft_info_author_title">Author</string>
+    <string name="aircraft_info_remark_title">Remark</string>
+
 </resources>

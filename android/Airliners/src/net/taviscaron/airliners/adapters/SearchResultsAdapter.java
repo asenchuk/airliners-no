@@ -24,11 +24,17 @@ public class SearchResultsAdapter extends BaseAdapter {
     protected ImageLoader imageLoader;
     protected List<AircraftSearchResult> results;
     protected Context context;
+    protected SearchResultsAdapterListener listener;
 
-    public SearchResultsAdapter(Context context) {
+    public interface SearchResultsAdapterListener {
+        public void searchResultItemThumbClicked(AircraftSearchResult result, int position);
+    }
+
+    public SearchResultsAdapter(Context context, SearchResultsAdapterListener listener) {
         this.context = context.getApplicationContext();
         this.results = new ArrayList<AircraftSearchResult>();
         this.imageLoader = new ImageLoader(context, ImageLoader.THUMB_CACHE_TAG);
+        this.listener = listener;
     }
 
     @Override
@@ -66,8 +72,8 @@ public class SearchResultsAdapter extends BaseAdapter {
         }
 
         final ViewHolder holder = (ViewHolder)view.getTag();
-
-        AircraftSearchResult result = getItem(position);
+        final int finalPosition = position;
+        final AircraftSearchResult result = getItem(position);
 
         holder.imageLoadingProgressBar.setVisibility(View.GONE);
 
@@ -84,12 +90,20 @@ public class SearchResultsAdapter extends BaseAdapter {
             updateTextViewValue(holder.countryDateLabel, null);
         }
 
+        // thumb
+        holder.imageView.setOnClickListener(null);
         imageLoader.loadImage(result.getThumbUrl(), new ImageLoader.ImageLoaderCallback() {
             @Override
             public void imageLoaded(ImageLoader loader, String url, Bitmap bitmap) {
                 holder.imageLoadingProgressBar.setVisibility(View.GONE);
                 holder.imageView.setImageBitmap(bitmap);
                 holder.imageView.setVisibility(View.VISIBLE);
+                holder.imageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        listener.searchResultItemThumbClicked(result, finalPosition);
+                    }
+                });
             }
 
             @Override

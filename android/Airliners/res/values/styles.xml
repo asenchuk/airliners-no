@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="AircraftItemAttributeText">
+    <style name="AircraftItemAttributeTextSigneLine" parent="AircraftItemAttributeText">
         <item name="android:ellipsize">end</item>
-        <item name="android:lines">1</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
+    <style name="AircraftItemAttributeText">
         <item name="android:textColor">#fff</item>
         <item name="android:textColorHighlight">#fff</item>
     </style>
+
     <style name="AircraftItemAttributesGroupHeader">
         <item name="android:paddingTop">1dp</item>
         <item name="android:paddingBottom">1dp</item>
