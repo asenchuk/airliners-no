@@ -99,6 +99,7 @@ public class AircraftInfoFragment extends Fragment {
         View view = inflater.inflate(R.layout.aircraft_info, container, false);
         view.findViewById(R.id.aircraft_info_layout).setVisibility(View.GONE);
         view.findViewById(R.id.aircraft_info_progress_bar).setVisibility(View.GONE);
+        view.findViewById(R.id.aircraft_info_photo_progress_bar).setVisibility(View.GONE);
         return view;
     }
 
@@ -121,9 +122,7 @@ public class AircraftInfoFragment extends Fragment {
     }
 
     public void loadAircraftInfo(String id) {
-        if(aircraftPhoto == null || !aircraftPhoto.getId().equals(id)) {
-            photoLoader.load(id, aircraftPhotoLoader);
-        }
+        photoLoader.load(id, aircraftPhotoLoader);
     }
 
     protected void updateImageViewSize() {

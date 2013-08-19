@@ -28,6 +28,16 @@
                 <action android:name="net.taviscaron.airliners.AIRCRAFT_INFO"/>
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="http"/>
+                <data android:host="airliners.net"/>
+                <data android:host="www.airliners.net"/>
+                <data android:pathPattern="/photo/.*/.*"/>
+                <data android:pathPattern="/photo/.*/.*/.*/.*"/>
+            </intent-filter>
         </activity>
     </application>
 </manifest>
