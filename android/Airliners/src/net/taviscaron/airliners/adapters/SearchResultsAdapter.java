@@ -80,7 +80,7 @@ public class SearchResultsAdapter extends BaseAdapter {
         // attributes
         updateTextViewValue(holder.aircraftLabel, result.getAircraft());
         updateTextViewValue(holder.airlineLabel, result.getAirline());
-        updateTextViewValue(holder.regLabel, result.getReg());
+        updateTextViewValue(holder.regLabel, result.fullReg());
         updateTextViewValue(holder.authorLabel, result.getAuthor());
         updateTextViewValue(holder.placeLabel, result.getPlace());
 

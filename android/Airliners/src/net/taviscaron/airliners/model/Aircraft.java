@@ -77,6 +77,9 @@ public class Aircraft implements Serializable {
         }
 
         if(cn != null) {
+            if(sb.length() > 0) {
+                sb.append(" ");
+            }
             sb.append(String.format("(cn %s)", cn));
         }
 
