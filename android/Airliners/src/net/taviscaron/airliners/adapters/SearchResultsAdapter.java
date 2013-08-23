@@ -112,7 +112,7 @@ public class SearchResultsAdapter extends BaseAdapter {
             }
 
             @Override
-            public void imageLoadFromNetworkStarted(ImageLoader loader, String url) {
+            public void imageLoadStarted(ImageLoader loader, String url) {
                 holder.imageLoadingProgressBar.setVisibility(View.VISIBLE);
                 holder.imageView.setVisibility(View.GONE);
             }

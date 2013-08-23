@@ -20,10 +20,12 @@ import net.taviscaron.airliners.model.AircraftPhoto;
  */
 public class AircraftInfoFragment extends Fragment {
     public static final String SAVED_AIRCRAFT_KEY = "savedAircraft";
+    public static final String SAVED_AIRCRAFT_ID_KEY = "savedAircraftId";
 
     private AircraftPhoto aircraftPhoto;
     private AircraftPhotoLoader photoLoader;
     private ImageLoader imageLoader;
+    private String initialAircraftId;
 
     private final ImageLoader.ImageLoaderCallback imageLoaderCallback = new ImageLoader.ImageLoaderCallback() {
         @Override
@@ -32,9 +34,10 @@ public class AircraftInfoFragment extends Fragment {
             if(view != null) {
                 ImageView imageView = (ImageView)view.findViewById(R.id.aircraft_info_photo_view);
                 imageView.setVisibility(View.VISIBLE);
-                view.findViewById(R.id.aircraft_info_photo_progress_bar).setVisibility(View.GONE);
                 imageView.setImageBitmap(bitmap);
                 updateImageViewSize();
+
+                view.findViewById(R.id.aircraft_info_photo_progress_bar).setVisibility(View.GONE);
             }
         }
 
@@ -48,11 +51,11 @@ public class AircraftInfoFragment extends Fragment {
         }
 
         @Override
-        public void imageLoadFromNetworkStarted(ImageLoader loader, String url) {
+        public void imageLoadStarted(ImageLoader loader, String url) {
             View view = getView();
             if(view != null) {
-                view.findViewById(R.id.aircraft_info_photo_view).setVisibility(View.GONE);
                 view.findViewById(R.id.aircraft_info_photo_progress_bar).setVisibility(View.VISIBLE);
+                view.findViewById(R.id.aircraft_info_photo_view).setVisibility(View.INVISIBLE);
             }
         }
     };
@@ -88,6 +91,7 @@ public class AircraftInfoFragment extends Fragment {
 
         if(savedInstanceState != null) {
             aircraftPhoto = (AircraftPhoto)savedInstanceState.getSerializable(SAVED_AIRCRAFT_KEY);
+            initialAircraftId = savedInstanceState.getString(SAVED_AIRCRAFT_ID_KEY);
         }
 
         photoLoader = new AircraftPhotoLoader(getActivity());
@@ -96,11 +100,10 @@ public class AircraftInfoFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.aircraft_info, container, false);
-        view.findViewById(R.id.aircraft_info_layout).setVisibility(View.GONE);
-        view.findViewById(R.id.aircraft_info_progress_bar).setVisibility(View.GONE);
-        view.findViewById(R.id.aircraft_info_photo_progress_bar).setVisibility(View.GONE);
-        return view;
+        View v = inflater.inflate(R.layout.aircraft_info, container, false);
+        v.findViewById(R.id.aircraft_info_layout).setVisibility(View.GONE);
+        v.findViewById(R.id.aircraft_info_progress_bar).setVisibility(View.GONE);
+        return v;
     }
 
     @Override
@@ -110,6 +113,10 @@ public class AircraftInfoFragment extends Fragment {
         if(aircraftPhoto != null) {
             outState.putSerializable(SAVED_AIRCRAFT_KEY, aircraftPhoto);
         }
+
+        if(initialAircraftId != null) {
+            outState.putString(SAVED_AIRCRAFT_ID_KEY, initialAircraftId);
+        }
     }
 
     @Override
@@ -118,10 +125,13 @@ public class AircraftInfoFragment extends Fragment {
 
         if(aircraftPhoto != null) {
             updateView();
+        } else if (initialAircraftId != null) {
+            loadAircraftInfo(initialAircraftId);
         }
     }
 
     public void loadAircraftInfo(String id) {
+        initialAircraftId = id;
         photoLoader.load(id, aircraftPhotoLoader);
     }
 
@@ -135,6 +145,7 @@ public class AircraftInfoFragment extends Fragment {
     protected void updateView() {
         View view = getView();
         view.findViewById(R.id.aircraft_info_layout).setVisibility(View.VISIBLE);
+        view.findViewById(R.id.aircraft_info_progress_bar).setVisibility(View.GONE);
 
         // thumb
         imageLoader.loadImage(aircraftPhoto.getImageUrl(), imageLoaderCallback);

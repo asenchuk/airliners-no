@@ -35,10 +35,10 @@ public class ImageLoader {
     private final Handler handler;
     private final URLStreamHandler urlStreamHandler;
 
-    public static interface ImageLoaderCallback {
+    public interface ImageLoaderCallback {
+        public void imageLoadStarted(ImageLoader loader, String url);
         public void imageLoaded(ImageLoader loader, String url, Bitmap bitmap);
         public void imageLoadFailed(ImageLoader loader, String url);
-        public void imageLoadFromNetworkStarted(ImageLoader loader, String url);
     }
 
     public ImageLoader(Context context, String cacheTag) {
@@ -60,6 +60,7 @@ public class ImageLoader {
     }
 
     public void loadImage(String url, ImageLoaderCallback callback) {
+        callbackLoadStarted(callback, url);
         executor.execute(new Loader(url, callback));
     }
 
@@ -103,14 +104,6 @@ public class ImageLoader {
             File bitmapFile = new File(cacheBaseDir, filename);
 
             if(!bitmapFile.exists()) {
-                // say callback about loading from network
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        callback.imageLoadFromNetworkStarted(ImageLoader.this, url);
-                    }
-                });
-
                 InputStream is = null;
                 OutputStream os = null;
                 try {
@@ -137,18 +130,30 @@ public class ImageLoader {
                 lock.notifyAll();
             }
 
-            final Bitmap result = (bitmapFile.exists()) ? BitmapFactory.decodeFile(bitmapFile.getAbsolutePath()) : null;
-
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    if(result != null) {
-                        callback.imageLoaded(ImageLoader.this, url, result);
-                    } else {
-                        callback.imageLoadFailed(ImageLoader.this, url);
-                    }
-                }
-            });
+            Bitmap result = (bitmapFile.exists()) ? BitmapFactory.decodeFile(bitmapFile.getAbsolutePath()) : null;
+            callbackLoadFinished(callback, url, result);
         }
+    }
+
+    protected void callbackLoadStarted(final ImageLoaderCallback callback, final String url) {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                callback.imageLoadStarted(ImageLoader.this, url);
+            }
+        });
+    }
+
+    protected void callbackLoadFinished(final ImageLoaderCallback callback, final String url, final Bitmap result) {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                if(result != null) {
+                    callback.imageLoaded(ImageLoader.this, url, result);
+                } else {
+                    callback.imageLoadFailed(ImageLoader.this, url);
+                }
+            }
+        });
     }
 }

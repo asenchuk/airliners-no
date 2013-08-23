@@ -69,7 +69,7 @@ public class ImageLoaderTest extends InstrumentationTestCase {
             }
 
             @Override
-            public void imageLoadFromNetworkStarted(ImageLoader loader, String url) {
+            public void imageLoadStarted(ImageLoader loader, String url) {
                 Assert.assertSame(Thread.currentThread(), Looper.getMainLooper().getThread());
                 loadFromNetworkCalled = true;
                 Assert.assertEquals(imageLoader, loader);
@@ -77,36 +77,6 @@ public class ImageLoaderTest extends InstrumentationTestCase {
             }
         });
         cdl1.await();
-
-        // Stage #2: load from cache
-        final CountDownLatch cdl2 = new CountDownLatch(1);
-        imageLoader.loadImage(expectedUrl, new ImageLoader.ImageLoaderCallback() {
-            @Override
-            public void imageLoaded(ImageLoader loader, String url, Bitmap bitmap) {
-                Assert.assertSame(Thread.currentThread(), Looper.getMainLooper().getThread());
-                Assert.assertEquals(imageLoader, loader);
-                Assert.assertEquals(expectedUrl, url);
-                Assert.assertNotNull(bitmap);
-                Assert.assertTrue(loadedBitmap.sameAs(bitmap));
-                cdl2.countDown();
-            }
-
-            @Override
-            public void imageLoadFailed(ImageLoader loader, String url) {
-                Assert.assertSame(Thread.currentThread(), Looper.getMainLooper().getThread());
-                Assert.assertEquals(imageLoader, loader);
-                Assert.assertEquals(expectedUrl, url);
-                Assert.fail("Image should not fail to load");
-                cdl2.countDown();
-            }
-
-            @Override
-            public void imageLoadFromNetworkStarted(ImageLoader loader, String url) {
-                Assert.assertSame(Thread.currentThread(), Looper.getMainLooper().getThread());
-                Assert.fail("Image should be loaded from cache");
-            }
-        });
-        cdl2.await();
     }
 
     public void testFailedImageLoading() throws Exception {
@@ -129,7 +99,7 @@ public class ImageLoaderTest extends InstrumentationTestCase {
             }
 
             @Override
-            public void imageLoadFromNetworkStarted(ImageLoader loader, String url) {
+            public void imageLoadStarted(ImageLoader loader, String url) {
                 Assert.assertSame(Thread.currentThread(), Looper.getMainLooper().getThread());
                 loadFromNetworkCalled = true;
                 Assert.assertEquals(imageLoader, loader);
@@ -145,8 +115,6 @@ public class ImageLoaderTest extends InstrumentationTestCase {
         final CountDownLatch cdl = new CountDownLatch(concurrentCount);
         for(int i = 0; i < concurrentCount; i++) {
             imageLoader.loadImage("http://example.com/blue.png", new ImageLoader.ImageLoaderCallback() {
-                boolean loadFromNetworkCalled = false;
-
                 @Override
                 public void imageLoaded(ImageLoader loader, String url, Bitmap bitmap) {
                     Assert.assertNotNull(bitmap);
@@ -165,12 +133,7 @@ public class ImageLoaderTest extends InstrumentationTestCase {
                 }
 
                 @Override
-                public void imageLoadFromNetworkStarted(ImageLoader loader, String url) {
-                    if(loadFromNetworkCalled) {
-                        Assert.fail("Image load from network started should not be called more 1 time");
-                    } else {
-                        loadFromNetworkCalled = true;
-                    }
+                public void imageLoadStarted(ImageLoader loader, String url) {
                 }
             });
         }

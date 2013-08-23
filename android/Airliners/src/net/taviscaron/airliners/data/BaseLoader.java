@@ -15,6 +15,7 @@ import java.net.*;
 import java.util.Map;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Entities base loader
@@ -90,11 +91,10 @@ public abstract class BaseLoader<T> {
         final String url = requestURLFromParams(param);
         final BaseLoaderCallback<T> finalCallback = callback;
 
+        callbackLoadStarted(callback);
         executor.execute(new Runnable() {
             @Override
             public void run() {
-                callbackLoadStarted(finalCallback);
-
                 T result = null;
 
                 Reader reader = null;
