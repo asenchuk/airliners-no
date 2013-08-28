@@ -21,4 +21,7 @@
     <string name="aircraft_info_author_title">Author</string>
     <string name="aircraft_info_remark_title">Remark</string>
 
+    <!-- actions -->
+    <string name="action_set_wallpaper">Set as wallpaper</string>
+
 </resources>

@@ -26,10 +26,12 @@ public class AircraftInfoFragment extends Fragment {
     private AircraftPhotoLoader photoLoader;
     private ImageLoader imageLoader;
     private String initialAircraftId;
+    private Bitmap aircraftPhotoBitmap;
 
     private final ImageLoader.ImageLoaderCallback imageLoaderCallback = new ImageLoader.ImageLoaderCallback() {
         @Override
         public void imageLoaded(ImageLoader loader, String url, Bitmap bitmap) {
+            aircraftPhotoBitmap = bitmap;
             View view = getView();
             if(view != null) {
                 ImageView imageView = (ImageView)view.findViewById(R.id.aircraft_info_photo_view);
@@ -193,5 +195,9 @@ public class AircraftInfoFragment extends Fragment {
 
     protected void showImageLoadingError() {
         // TODO: impl.
+    }
+
+    public Bitmap getAircraftPhotoBitmap() {
+        return aircraftPhotoBitmap;
     }
 }

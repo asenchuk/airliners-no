@@ -1,13 +1,18 @@
 package net.taviscaron.airliners.activities;
 
+import android.app.WallpaperManager;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 import net.taviscaron.airliners.R;
 import net.taviscaron.airliners.fragments.AircraftInfoFragment;
 
+import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -16,6 +21,7 @@ import java.util.regex.Pattern;
  * @author Andrei Senchuk
  */
 public class AircraftInfoActivity extends SherlockFragmentActivity {
+    public static final String TAG = "AircraftInfoActivity";
     public static final String AIRCRAFT_INFO_ACTION = "net.taviscaron.airliners.AIRCRAFT_INFO";
     public static final String AIRCRAFT_ID_KEY = "aircraftId";
 
@@ -44,6 +50,38 @@ public class AircraftInfoActivity extends SherlockFragmentActivity {
 
             if(id != null) {
                 fragment.loadAircraftInfo(id);
+            }
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getSupportMenuInflater().inflate(R.menu.aircraft_info_activity_actions, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        boolean result = true;
+        switch (item.getItemId()) {
+            case R.id.aircraft_info_action_set_wallpaper:
+                setImageAsWallpaper();
+                break;
+            default:
+                result = super.onOptionsItemSelected(item);
+                break;
+        }
+        return result;
+    }
+
+    private void setImageAsWallpaper() {
+        AircraftInfoFragment fragment = (AircraftInfoFragment)getSupportFragmentManager().findFragmentById(R.id.aircraft_info_fragment);
+        Bitmap photo = fragment.getAircraftPhotoBitmap();
+        if(photo != null) {
+            try {
+                WallpaperManager.getInstance(this).setBitmap(photo);
+            } catch (IOException e) {
+                Log.w(TAG, "Failed to set wallpaper", e);
             }
         }
     }
