@@ -94,7 +94,7 @@ public class SearchResultsAdapter extends BaseAdapter {
         holder.imageView.setOnClickListener(null);
         imageLoader.loadImage(result.getThumbUrl(), new ImageLoader.ImageLoaderCallback() {
             @Override
-            public void imageLoaded(ImageLoader loader, String url, Bitmap bitmap) {
+            public void imageLoaded(ImageLoader loader, String url, Bitmap bitmap, String imageCachePath) {
                 holder.imageLoadingProgressBar.setVisibility(View.GONE);
                 holder.imageView.setImageBitmap(bitmap);
                 holder.imageView.setVisibility(View.VISIBLE);

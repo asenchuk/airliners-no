@@ -30,7 +30,7 @@ public class AircraftInfoFragment extends Fragment {
 
     private final ImageLoader.ImageLoaderCallback imageLoaderCallback = new ImageLoader.ImageLoaderCallback() {
         @Override
-        public void imageLoaded(ImageLoader loader, String url, Bitmap bitmap) {
+        public void imageLoaded(ImageLoader loader, String url, Bitmap bitmap, String imageCachePath) {
             aircraftPhotoBitmap = bitmap;
             View view = getView();
             if(view != null) {

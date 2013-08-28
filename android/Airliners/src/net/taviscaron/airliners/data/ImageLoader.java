@@ -37,7 +37,7 @@ public class ImageLoader {
 
     public interface ImageLoaderCallback {
         public void imageLoadStarted(ImageLoader loader, String url);
-        public void imageLoaded(ImageLoader loader, String url, Bitmap bitmap);
+        public void imageLoaded(ImageLoader loader, String url, Bitmap bitmap, String imageCachePath);
         public void imageLoadFailed(ImageLoader loader, String url);
     }
 
@@ -131,7 +131,7 @@ public class ImageLoader {
             }
 
             Bitmap result = (bitmapFile.exists()) ? BitmapFactory.decodeFile(bitmapFile.getAbsolutePath()) : null;
-            callbackLoadFinished(callback, url, result);
+            callbackLoadFinished(callback, url, result, bitmapFile.getAbsolutePath());
         }
     }
 
@@ -144,12 +144,12 @@ public class ImageLoader {
         });
     }
 
-    protected void callbackLoadFinished(final ImageLoaderCallback callback, final String url, final Bitmap result) {
+    protected void callbackLoadFinished(final ImageLoaderCallback callback, final String url, final Bitmap result, final String imageCachePath) {
         handler.post(new Runnable() {
             @Override
             public void run() {
                 if(result != null) {
-                    callback.imageLoaded(ImageLoader.this, url, result);
+                    callback.imageLoaded(ImageLoader.this, url, result, imageCachePath);
                 } else {
                     callback.imageLoadFailed(ImageLoader.this, url);
                 }

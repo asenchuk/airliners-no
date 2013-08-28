@@ -48,13 +48,14 @@ public class ImageLoaderTest extends InstrumentationTestCase {
             boolean loadFromNetworkCalled = false;
 
             @Override
-            public void imageLoaded(ImageLoader loader, String url, Bitmap bitmap) {
+            public void imageLoaded(ImageLoader loader, String url, Bitmap bitmap, String imageCachePath) {
                 Assert.assertSame(Thread.currentThread(), Looper.getMainLooper().getThread());
                 Assert.assertTrue("Load from network started callback was not called", loadFromNetworkCalled);
                 Assert.assertEquals(imageLoader, loader);
                 Assert.assertEquals(expectedUrl, url);
                 Assert.assertNotNull(bitmap);
                 Assert.assertTrue("File should be loaded to cache", file.exists());
+                Assert.assertEquals(file.getAbsolutePath(), imageCachePath);
                 loadedBitmap = bitmap;
                 cdl1.countDown();
             }
@@ -85,7 +86,7 @@ public class ImageLoaderTest extends InstrumentationTestCase {
             boolean loadFromNetworkCalled = false;
 
             @Override
-            public void imageLoaded(ImageLoader loader, String url, Bitmap bitmap) {
+            public void imageLoaded(ImageLoader loader, String url, Bitmap bitmap, String imageCachePath) {
                 Assert.assertSame(Thread.currentThread(), Looper.getMainLooper().getThread());
                 Assert.fail("Image should not be loaded");
                 cdl.countDown();
@@ -116,7 +117,7 @@ public class ImageLoaderTest extends InstrumentationTestCase {
         for(int i = 0; i < concurrentCount; i++) {
             imageLoader.loadImage("http://example.com/blue.png", new ImageLoader.ImageLoaderCallback() {
                 @Override
-                public void imageLoaded(ImageLoader loader, String url, Bitmap bitmap) {
+                public void imageLoaded(ImageLoader loader, String url, Bitmap bitmap, String imageCachePath) {
                     Assert.assertNotNull(bitmap);
                     if(loadedBitmap != null) {
                         Assert.assertTrue("Loaded bitmaps should be same", loadedBitmap.sameAs(bitmap));
