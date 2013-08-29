@@ -40,5 +40,13 @@
                 <data android:pathPattern="/photo/.*/.*/.*/.*"/>
             </intent-filter>
         </activity>
+        <activity
+                android:name=".activities.SetWallpaperActivity"
+                android:theme="@android:style/Theme.Translucent">
+            <intent-filter>
+                <action android:name="net.taviscaron.airliners.SET_WALLPAPER"/>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
     </application>
 </manifest>

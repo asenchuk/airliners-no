@@ -1,18 +1,15 @@
 package net.taviscaron.airliners.activities;
 
-import android.app.WallpaperManager;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import net.taviscaron.airliners.R;
 import net.taviscaron.airliners.fragments.AircraftInfoFragment;
 
-import java.io.IOException;
+import java.io.File;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -21,7 +18,6 @@ import java.util.regex.Pattern;
  * @author Andrei Senchuk
  */
 public class AircraftInfoActivity extends SherlockFragmentActivity {
-    public static final String TAG = "AircraftInfoActivity";
     public static final String AIRCRAFT_INFO_ACTION = "net.taviscaron.airliners.AIRCRAFT_INFO";
     public static final String AIRCRAFT_ID_KEY = "aircraftId";
 
@@ -76,13 +72,9 @@ public class AircraftInfoActivity extends SherlockFragmentActivity {
 
     private void setImageAsWallpaper() {
         AircraftInfoFragment fragment = (AircraftInfoFragment)getSupportFragmentManager().findFragmentById(R.id.aircraft_info_fragment);
-        Bitmap photo = fragment.getAircraftPhotoBitmap();
-        if(photo != null) {
-            try {
-                WallpaperManager.getInstance(this).setBitmap(photo);
-            } catch (IOException e) {
-                Log.w(TAG, "Failed to set wallpaper", e);
-            }
+        String photoPath = fragment.getAircraftPhotoPath();
+        if(photoPath != null && new File(photoPath).exists()) {
+            startActivity(new Intent(SetWallpaperActivity.SET_WALLPAPER_ACTION).putExtra(SetWallpaperActivity.IMAGE_PATH_EXTRA, photoPath));
         }
     }
 }
