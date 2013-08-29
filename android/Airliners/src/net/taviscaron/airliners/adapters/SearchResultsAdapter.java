@@ -92,6 +92,7 @@ public class SearchResultsAdapter extends BaseAdapter {
 
         // thumb
         holder.imageView.setOnClickListener(null);
+        holder.imageView.setImageResource(android.R.color.transparent);
         imageLoader.loadImage(result.getThumbUrl(), new ImageLoader.ImageLoaderCallback() {
             @Override
             public void imageLoaded(ImageLoader loader, String url, Bitmap bitmap, String imageCachePath) {
