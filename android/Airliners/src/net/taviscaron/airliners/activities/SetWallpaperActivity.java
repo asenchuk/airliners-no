@@ -66,9 +66,14 @@ public class SetWallpaperActivity extends Activity {
         if(!list.isEmpty()) {
             WallpaperManager mgr = WallpaperManager.getInstance(this);
 
-            intent.putExtra("aspectX", mgr.getDesiredMinimumWidth());
-            intent.putExtra("aspectY", mgr.getDesiredMinimumHeight());
-            intent.putExtra("scale", false);
+            int width = mgr.getDesiredMinimumWidth();
+            int height = mgr.getDesiredMinimumHeight();
+
+            intent.putExtra("outputX", width);
+            intent.putExtra("outputY", height);
+            intent.putExtra("aspectX", width);
+            intent.putExtra("aspectY", height);
+            intent.putExtra("scale", true);
             intent.putExtra("return-data", false);
             intent.setData(Uri.fromFile(new File(imagePath)));
 
