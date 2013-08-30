@@ -5,4 +5,9 @@
             android:icon="@drawable/ic_action_set_wallpaper"
             android:title="@string/action_set_wallpaper"
             android:showAsAction="ifRoom"/>
+    <item
+            android:id="@+id/aircraft_info_action_share"
+            android:icon="@drawable/ic_action_share"
+            android:title="@string/action_share"
+            android:showAsAction="ifRoom"/>
 </menu>

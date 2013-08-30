@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="api_base_url">http://airliners-api.aws.af.cm/</string>
+    <string name="config_api_base_url">http://airliners-api.aws.af.cm/</string>
+    <string name="config_site_photo_url">http://www.airliners.net/photo/%1$s/L</string>
 </resources>

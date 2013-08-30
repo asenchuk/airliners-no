@@ -22,6 +22,7 @@
     <string name="aircraft_info_remark_title">Remark</string>
 
     <!-- actions -->
-    <string name="action_set_wallpaper">Set as wallpaper</string>
+    <string name="action_set_wallpaper">Set as wallpaper&#8230;</string>
+    <string name="action_share">Share&#8230;</string>
 
 </resources>

@@ -200,4 +200,8 @@ public class AircraftInfoFragment extends Fragment {
     public String getAircraftPhotoPath() {
         return aircraftPhotoPath;
     }
+
+    public AircraftPhoto getAircraftPhoto() {
+        return aircraftPhoto;
+    }
 }

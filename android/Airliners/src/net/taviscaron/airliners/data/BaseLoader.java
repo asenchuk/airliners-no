@@ -46,7 +46,7 @@ public abstract class BaseLoader<T> {
             throw new IllegalArgumentException("Relative url should start with '/'");
         }
 
-        String rootUrl = context.getString(R.string.api_base_url);
+        String rootUrl = context.getString(R.string.config_api_base_url);
         if(rootUrl.endsWith("/")) {
             rootUrl = rootUrl.substring(0, rootUrl.length() - 1);
         }
