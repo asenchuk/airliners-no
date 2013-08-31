@@ -44,8 +44,7 @@ public class SetWallpaperActivity extends Activity {
         switch(requestCode) {
             case CROP_REQUEST_CODE:
                 if(resultCode == RESULT_OK) {
-                    String imagePath = data.getAction().replace("file://", "");
-                    setWallpaperImageFromPath(imagePath);
+                    setWallpaperImageFromPath(tempFile.getAbsolutePath());
                 }
                 // remove temp file
                 tempFile.delete();
