@@ -6,12 +6,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import net.taviscaron.airliners.R;
 import net.taviscaron.airliners.data.ImageLoader;
 import net.taviscaron.airliners.model.AircraftSearchResult;
+import net.taviscaron.airliners.views.AspectConstantImageView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,24 +54,11 @@ public class SearchResultsAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View view, ViewGroup parent) {
-
         if(view == null) {
             view = LayoutInflater.from(context).inflate(R.layout.aircraft_search_result_item, parent, false);
-
-            ViewHolder holder = new ViewHolder();
-            holder.imageLoadingProgressBar = (ProgressBar)view.findViewById(R.id.aircraft_search_result_item_image_progress);
-            holder.imageView = (ImageView)view.findViewById(R.id.aircraft_search_result_item_image);
-            holder.aircraftLabel = (TextView)view.findViewById(R.id.aircraft_search_result_item_aircraft);
-            holder.airlineLabel = (TextView)view.findViewById(R.id.aircraft_search_result_item_airline);
-            holder.regLabel = (TextView)view.findViewById(R.id.aircraft_search_result_item_registration);
-            holder.authorLabel = (TextView)view.findViewById(R.id.aircraft_search_result_item_author);
-            holder.placeLabel = (TextView)view.findViewById(R.id.aircraft_search_result_item_place);
-            holder.countryDateLabel = (TextView)view.findViewById(R.id.aircraft_search_result_item_country_date);
-
-            view.setTag(holder);
         }
 
-        final ViewHolder holder = (ViewHolder)view.getTag();
+        final ViewHolder holder = ViewHolder.viewHolderOf(view);
         final int finalPosition = position;
         final AircraftSearchResult result = getItem(position);
 
@@ -80,15 +67,6 @@ public class SearchResultsAdapter extends BaseAdapter {
         // attributes
         updateTextViewValue(holder.aircraftLabel, result.getAircraft());
         updateTextViewValue(holder.airlineLabel, result.getAirline());
-        updateTextViewValue(holder.regLabel, result.fullReg());
-        updateTextViewValue(holder.authorLabel, result.getAuthor());
-        updateTextViewValue(holder.placeLabel, result.getPlace());
-
-        if(result.getCountry() != null && result.getDate() != null) {
-            updateTextViewValue(holder.countryDateLabel, String.format("%s, %s", result.getCountry(), result.getDate()));
-        } else {
-            updateTextViewValue(holder.countryDateLabel, null);
-        }
 
         // thumb
         holder.imageView.setOnClickListener(null);
@@ -137,13 +115,25 @@ public class SearchResultsAdapter extends BaseAdapter {
     }
 
     private static class ViewHolder {
-        ProgressBar imageLoadingProgressBar;
-        ImageView imageView;
-        TextView aircraftLabel;
-        TextView airlineLabel;
-        TextView regLabel;
-        TextView authorLabel;
-        TextView placeLabel;
-        TextView countryDateLabel;
+        final ProgressBar imageLoadingProgressBar;
+        final AspectConstantImageView imageView;
+        final TextView aircraftLabel;
+        final TextView airlineLabel;
+
+        private ViewHolder(View view) {
+            imageLoadingProgressBar = (ProgressBar)view.findViewById(R.id.aircraft_search_result_item_image_progress);
+            imageView = (AspectConstantImageView)view.findViewById(R.id.aircraft_search_result_item_image);
+            aircraftLabel = (TextView)view.findViewById(R.id.aircraft_search_result_item_aircraft);
+            airlineLabel = (TextView)view.findViewById(R.id.aircraft_search_result_item_airline);
+        }
+
+        public static ViewHolder viewHolderOf(View view) {
+            ViewHolder holder = (ViewHolder)view.getTag();
+            if(holder == null) {
+                holder = new ViewHolder(view);
+                view.setTag(holder);
+            }
+            return holder;
+        }
     }
 }

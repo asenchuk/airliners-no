@@ -35,7 +35,7 @@ public class SearchResultsFragment extends Fragment {
     private LoaderType loaderType;
     private SearchLoader loader;
     private ProgressBar progressBar;
-    private ListView searchListView;
+    private GridView searchListView;
     private SearchResultsAdapter adapter;
     private SearchResult searchResult;
     private Object param;
@@ -105,7 +105,7 @@ public class SearchResultsFragment extends Fragment {
         View view = inflater.inflate(R.layout.search_results, container, false);
 
         progressBar = (ProgressBar)view.findViewById(R.id.search_progress_view);
-        searchListView = (ListView)view.findViewById(R.id.search_results_list_view);
+        searchListView = (GridView)view.findViewById(R.id.search_results_list_view);
         searchListView.setAdapter(adapter);
 
         return view;
