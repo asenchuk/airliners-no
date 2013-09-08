@@ -9,6 +9,7 @@ import com.actionbarsherlock.view.MenuItem;
 import net.taviscaron.airliners.R;
 import net.taviscaron.airliners.fragments.AircraftInfoFragment;
 import net.taviscaron.airliners.model.AircraftPhoto;
+import net.taviscaron.airliners.views.AlbumNavigationBar;
 
 import java.io.File;
 import java.util.regex.Matcher;
@@ -18,18 +19,21 @@ import java.util.regex.Pattern;
  * Shows aircraft information
  * @author Andrei Senchuk
  */
-public class AircraftInfoActivity extends SherlockFragmentActivity {
+public class AircraftInfoActivity extends SherlockFragmentActivity implements AircraftInfoFragment.StateListener {
     public static final String AIRCRAFT_INFO_ACTION = "net.taviscaron.airliners.AIRCRAFT_INFO";
     public static final String AIRCRAFT_ID_KEY = "aircraftId";
 
     private AircraftInfoFragment fragment;
+    private AlbumNavigationBar albumNavigationBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.aircraft_info_fragment);
+        setContentView(R.layout.aircraft_info);
 
         fragment = (AircraftInfoFragment)getSupportFragmentManager().findFragmentById(R.id.aircraft_info_fragment);
+        albumNavigationBar = (AlbumNavigationBar)findViewById(R.id.aircraft_info_album_nav_bar);
+        albumNavigationBar.setListener(albumNavigationBarListener);
 
         // state is not restoring
         if(savedInstanceState == null) {
@@ -49,8 +53,11 @@ public class AircraftInfoActivity extends SherlockFragmentActivity {
             }
 
             if(id != null) {
-                fragment.loadAircraftInfo(id);
+                fragment.loadAircraft(id);
             }
+        } else {
+            AircraftPhoto photo = fragment.getAircraftPhoto();
+            onAircraftInfoLoaded(photo);
         }
     }
 
@@ -105,4 +112,38 @@ public class AircraftInfoActivity extends SherlockFragmentActivity {
             startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.action_share)));
         }
     }
+
+    @Override
+    public void onAircraftInfoLoadStarted(String id) {
+        albumNavigationBar.setEnabled(false);
+    }
+
+    @Override
+    public void onAircraftInfoLoaded(AircraftPhoto photo) {
+        albumNavigationBar.setEnabled(true);
+
+        long count = photo.getCount();
+        long pos = photo.getPos();
+        if(pos >= 0 && pos <= count) {
+            albumNavigationBar.setPosition(pos, count);
+        }
+    }
+
+    private final AlbumNavigationBar.AlbumNavigationBarListener albumNavigationBarListener = new AlbumNavigationBar.AlbumNavigationBarListener() {
+        @Override
+        public void next() {
+            AircraftPhoto aircraftPhoto = fragment.getAircraftPhoto();
+            if(aircraftPhoto != null && aircraftPhoto.getNext() != null) {
+                fragment.loadAircraft(aircraftPhoto.getNext());
+            }
+        }
+
+        @Override
+        public void prev() {
+            AircraftPhoto aircraftPhoto = fragment.getAircraftPhoto();
+            if(aircraftPhoto != null && aircraftPhoto.getPrev() != null) {
+                fragment.loadAircraft(aircraftPhoto.getPrev());
+            }
+        }
+    };
 }

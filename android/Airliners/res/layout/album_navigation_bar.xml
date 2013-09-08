@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:orientation="horizontal"
+              android:gravity="center_vertical">
+
+    <Button
+            android:id="@+id/album_navigation_bar_prev_button"
+            android:background="@drawable/ic_action_prev"
+            style="@style/AlbumNavigationBarButton"/>
+
+    <TextView
+            android:id="@+id/album_navigation_bar_position"
+            android:layout_height="fill_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:gravity="center"/>
+
+    <Button
+            android:id="@+id/album_navigation_bar_next_button"
+            android:background="@drawable/ic_action_next"
+            style="@style/AlbumNavigationBarButton"/>
+
+</LinearLayout>

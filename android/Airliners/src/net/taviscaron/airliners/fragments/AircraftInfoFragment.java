@@ -1,5 +1,6 @@
 package net.taviscaron.airliners.fragments;
 
+import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -27,6 +28,11 @@ public class AircraftInfoFragment extends Fragment {
     private ImageLoader imageLoader;
     private String initialAircraftId;
     private String aircraftPhotoPath;
+
+    public interface StateListener {
+        public void onAircraftInfoLoadStarted(String id);
+        public void onAircraftInfoLoaded(AircraftPhoto photo);
+    }
 
     private final ImageLoader.ImageLoaderCallback imageLoaderCallback = new ImageLoader.ImageLoaderCallback() {
         @Override
@@ -65,6 +71,7 @@ public class AircraftInfoFragment extends Fragment {
     private final AircraftPhotoLoader.BaseLoaderCallback<AircraftPhoto> aircraftPhotoLoader = new AircraftPhotoLoader.BaseLoaderCallback<AircraftPhoto>() {
         @Override
         public void loadStarted(BaseLoader<AircraftPhoto> loader) {
+            notifyOnAircraftInfoLoadStarted(initialAircraftId);
             View view = getView();
             if(view != null) {
                 view.findViewById(R.id.aircraft_info_progress_bar).setVisibility(View.VISIBLE);
@@ -74,6 +81,7 @@ public class AircraftInfoFragment extends Fragment {
 
         @Override
         public void loadFinished(BaseLoader<AircraftPhoto> loader, AircraftPhoto obj) {
+            notifyOnAircraftInfoLoaded(obj);
             View view = getView();
             if(view != null) {
                 view.findViewById(R.id.aircraft_info_progress_bar).setVisibility(View.GONE);
@@ -102,7 +110,7 @@ public class AircraftInfoFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.aircraft_info, container, false);
+        View v = inflater.inflate(R.layout.aircraft_info_view, container, false);
         v.findViewById(R.id.aircraft_info_layout).setVisibility(View.GONE);
         v.findViewById(R.id.aircraft_info_progress_bar).setVisibility(View.GONE);
         return v;
@@ -128,11 +136,11 @@ public class AircraftInfoFragment extends Fragment {
         if(aircraftPhoto != null) {
             updateView();
         } else if (initialAircraftId != null) {
-            loadAircraftInfo(initialAircraftId);
+            loadAircraft(initialAircraftId);
         }
     }
 
-    public void loadAircraftInfo(String id) {
+    public void loadAircraft(String id) {
         initialAircraftId = id;
         photoLoader.load(id, aircraftPhotoLoader);
     }
@@ -150,6 +158,8 @@ public class AircraftInfoFragment extends Fragment {
         view.findViewById(R.id.aircraft_info_progress_bar).setVisibility(View.GONE);
 
         // thumb
+        ImageView imageView = (ImageView)view.findViewById(R.id.aircraft_info_photo_view);
+        imageView.setImageResource(android.R.color.transparent);
         imageLoader.loadImage(aircraftPhoto.getImageUrl(), imageLoaderCallback);
 
         // airline
@@ -203,5 +213,19 @@ public class AircraftInfoFragment extends Fragment {
 
     public AircraftPhoto getAircraftPhoto() {
         return aircraftPhoto;
+    }
+
+    private void notifyOnAircraftInfoLoadStarted(String id) {
+        Activity activity = getActivity();
+        if(activity instanceof StateListener) {
+            ((StateListener) activity).onAircraftInfoLoadStarted(id);
+        }
+    }
+
+    private void notifyOnAircraftInfoLoaded(AircraftPhoto photo) {
+        Activity activity = getActivity();
+        if(activity instanceof StateListener) {
+            ((StateListener) activity).onAircraftInfoLoaded(photo);
+        }
     }
 }
