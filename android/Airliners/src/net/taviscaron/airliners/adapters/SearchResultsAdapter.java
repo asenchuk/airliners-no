@@ -192,7 +192,7 @@ public class SearchResultsAdapter extends BaseAdapter implements AbsListView.OnS
 
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-        if(hasNext && !isLoading && totalItemCount - firstVisibleItem - visibleItemCount < visibleItemCount) {
+        if(hasNext && !isLoading && totalItemCount - firstVisibleItem - visibleItemCount < Math.max(visibleItemCount, params.getLimit() / 2)) {
             params.setPage(params.getPage() + 1);
             loadResults();
         }
