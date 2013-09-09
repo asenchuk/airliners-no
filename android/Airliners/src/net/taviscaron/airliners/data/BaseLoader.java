@@ -3,6 +3,7 @@ package net.taviscaron.airliners.data;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.TextUtils;
 import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -15,7 +16,6 @@ import java.net.*;
 import java.util.Map;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Entities base loader
@@ -64,24 +64,27 @@ public abstract class BaseLoader<T> {
         String url = baseUrl;
 
         if(params != null) {
-            StringBuilder sb = new StringBuilder();
+            String[] stringParams = new String[params.size()];
+            int i = 0;
             for(String key : params.keySet()) {
                 String value = params.get(key).toString();
-
-                if(sb.length() == 0) {
-                    sb.append((baseUrl.contains("?")) ? '&' : '?');
-                }
 
                 try {
                     key = URLEncoder.encode(key, "UTF-8");
                     value = URLEncoder.encode(value, "UTF-8");
-                    sb.append(String.format("%s=%s", key, value));
+                    stringParams[i++] = String.format("%s=%s", key, value);
                 } catch (UnsupportedEncodingException e) {
                     throw new RuntimeException(e);
                 }
             }
 
-            url += sb;
+            String requestString = TextUtils.join("&", stringParams);
+
+            if(baseUrl.indexOf("?") != -1) {
+                url = url + "&" + requestString;
+            } else {
+                url = url + "?" + requestString;
+            }
         }
 
         return url;

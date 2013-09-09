@@ -2,39 +2,124 @@ package net.taviscaron.airliners.adapters;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import net.taviscaron.airliners.R;
+import net.taviscaron.airliners.data.BaseLoader;
 import net.taviscaron.airliners.data.ImageLoader;
+import net.taviscaron.airliners.data.SearchLoader;
 import net.taviscaron.airliners.model.AircraftSearchResult;
+import net.taviscaron.airliners.model.SearchParams;
+import net.taviscaron.airliners.model.SearchResult;
 import net.taviscaron.airliners.views.AspectConstantImageView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
  * SearchResults table adapter
  * @author Andrei Senchuk
  */
-public class SearchResultsAdapter extends BaseAdapter {
-    protected ImageLoader imageLoader;
-    protected List<AircraftSearchResult> results;
-    protected Context context;
-    protected SearchResultsAdapterListener listener;
+public class SearchResultsAdapter extends BaseAdapter implements AbsListView.OnScrollListener {
+    private static final String LOADER_TYPE_KEY = "loaderType";
+    private static final String SEARCH_PARAMS_KEY = "searchParams";
+    private static final String RESULTS_KEY = "results";
+    private static final String HAS_NEXT_PAGES_KEY = "hasNextPages";
+
+    private Context context;
+    private LoaderType loaderType;
+    private SearchParams params;
+    private ImageLoader imageLoader;
+    private SearchLoader searchLoader;
+    private List<AircraftSearchResult> results;
+    private SearchResultsAdapterListener listener;
+    private boolean hasNext;
+    private boolean isLoading;
+
+    public enum LoaderType {
+        TOP15, TOP, SEARCH
+    }
 
     public interface SearchResultsAdapterListener {
         public void searchResultItemThumbClicked(AircraftSearchResult result, int position);
+        public void loadStarted();
+        public void loadFinished();
     }
 
-    public SearchResultsAdapter(Context context, SearchResultsAdapterListener listener) {
+    private SearchLoader.BaseLoaderCallback<SearchResult> searchLoaderListener = new SearchLoader.BaseLoaderCallback<SearchResult>() {
+        @Override
+        public void loadStarted(BaseLoader<SearchResult> loader) {
+            listener.loadStarted();
+        }
+
+        @Override
+        public void loadFinished(BaseLoader<SearchResult> loader, SearchResult obj) {
+            listener.loadFinished();
+
+            isLoading = false;
+
+            if(obj != null) {
+                hasNext = obj.getTo() < obj.getTotal();
+
+                AircraftSearchResult[] items = obj.getItems();
+                if(items != null && items.length > 0) {
+                    results.addAll(Arrays.asList(items));
+                    notifyDataSetChanged();
+                }
+            }
+        }
+    };
+
+    public SearchResultsAdapter(Context context, SearchResultsAdapterListener listener, LoaderType loaderType, SearchParams params, int itemsPerPage) {
         this.context = context.getApplicationContext();
-        this.results = new ArrayList<AircraftSearchResult>();
-        this.imageLoader = new ImageLoader(context, ImageLoader.THUMB_CACHE_TAG);
         this.listener = listener;
+
+        this.loaderType = loaderType;
+        this.params = params;
+        this.results = new ArrayList<AircraftSearchResult>();
+
+        this.params.setPage(1);
+        this.params.setLimit(itemsPerPage);
+
+        initLoaders();
+    }
+
+    public SearchResultsAdapter(Context context, SearchResultsAdapterListener listener, Bundle savedInstanceState) {
+        this.context = context.getApplicationContext();
+        this.listener = listener;
+
+        this.loaderType = LoaderType.values()[savedInstanceState.getInt(LOADER_TYPE_KEY)];
+        this.params = (SearchParams)savedInstanceState.getSerializable(SEARCH_PARAMS_KEY);
+        this.results = new ArrayList<AircraftSearchResult>(Arrays.asList((AircraftSearchResult[])savedInstanceState.getSerializable(RESULTS_KEY)));
+
+        this.hasNext = savedInstanceState.getBoolean(HAS_NEXT_PAGES_KEY);
+
+        initLoaders();
+    }
+
+    private void initLoaders() {
+        this.imageLoader = new ImageLoader(context, ImageLoader.THUMB_CACHE_TAG);
+
+        switch(loaderType) {
+            case TOP:
+                searchLoader = SearchLoader.createTopLoader(context);
+                break;
+            case TOP15:
+                searchLoader = SearchLoader.createTop15Loader(context);
+                break;
+            case SEARCH:
+                searchLoader = SearchLoader.createSearchLoader(context);
+                break;
+            default:
+                throw new RuntimeException("Bad loader type");
+        }
     }
 
     @Override
@@ -100,6 +185,41 @@ public class SearchResultsAdapter extends BaseAdapter {
         return view;
     }
 
+    @Override
+    public void onScrollStateChanged(AbsListView view, int scrollState) {
+        // noop
+    }
+
+    @Override
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        if(hasNext && !isLoading && totalItemCount - firstVisibleItem - visibleItemCount < visibleItemCount) {
+            params.setPage(params.getPage() + 1);
+            loadResults();
+        }
+    }
+
+    public void onSaveInstanceState(Bundle bundle) {
+        AircraftSearchResult[] resultsArray = new AircraftSearchResult[results.size()];
+        bundle.putSerializable(RESULTS_KEY, results.toArray(resultsArray));
+
+        bundle.putSerializable(SEARCH_PARAMS_KEY, params);
+        bundle.putInt(LOADER_TYPE_KEY, loaderType.ordinal());
+        bundle.putBoolean(HAS_NEXT_PAGES_KEY, hasNext);
+    }
+
+    public void performInitialLoadIfNeeded() {
+        if(results.isEmpty()) {
+            loadResults();
+        }
+    }
+
+    private void loadResults() {
+        if(!isLoading) {
+            isLoading = true;
+            searchLoader.load(params.toLoaderParam(), searchLoaderListener);
+        }
+    }
+
     private void updateTextViewValue(TextView textView, String value) {
         if(value == null || value.isEmpty()) {
             textView.setVisibility(View.GONE);
@@ -107,11 +227,6 @@ public class SearchResultsAdapter extends BaseAdapter {
             textView.setVisibility(View.VISIBLE);
             textView.setText(value);
         }
-    }
-
-    public void addAll(List<AircraftSearchResult> newResults) {
-        results.addAll(newResults);
-        notifyDataSetChanged();
     }
 
     private static class ViewHolder {

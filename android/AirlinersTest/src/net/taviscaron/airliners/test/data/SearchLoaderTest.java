@@ -7,6 +7,7 @@ import junit.framework.Assert;
 import net.taviscaron.airliners.data.BaseLoader;
 import net.taviscaron.airliners.data.SearchLoader;
 import net.taviscaron.airliners.model.AircraftSearchResult;
+import net.taviscaron.airliners.model.SearchParams;
 import net.taviscaron.airliners.model.SearchResult;
 import net.taviscaron.airliners.test.mocks.MockURLStreamHandler;
 
@@ -31,57 +32,14 @@ public class SearchLoaderTest extends InstrumentationTestCase {
         searchLoader = SearchLoader.createSearchLoader(targetContext, urlStreamHandler);
     }
 
-    public void testRequestBuilder() {
-        String aircraft = "b777";
-        String airline = "aa";
-        String cn = "123";
-        String code = "111";
-        String country = "US";
-        String date = "12 12 12";
-        Integer limit = 23;
-        Integer page = 2;
-        String place = "London, Heathrow";
-        String reg = "AA-1233";
-        String remark = "test";
-        Integer year = 2013;
-
-        SearchLoader.RequestBuilder rb = new SearchLoader.RequestBuilder();
-        rb.setAircraft(aircraft);
-        rb.setAirline(airline);
-        rb.setCn(cn);
-        rb.setCode(code);
-        rb.setCountry(country);
-        rb.setDate(date);
-        rb.setLimit(limit);
-        rb.setPage(page);
-        rb.setPlace(place);
-        rb.setReg(reg);
-        rb.setRemark(remark);
-        rb.setYear(year);
-        Map<String, Object> params = rb.createParams();
-
-        Assert.assertEquals(aircraft, params.get(SearchLoader.AIRCRAFT_PARAM));
-        Assert.assertEquals(airline, params.get(SearchLoader.AIRLINE_PARAM));
-        Assert.assertEquals(cn, params.get(SearchLoader.CN_PARAM));
-        Assert.assertEquals(code, params.get(SearchLoader.CODE_PARAM));
-        Assert.assertEquals(country, params.get(SearchLoader.COUNTRY_PARAM));
-        Assert.assertEquals(date, params.get(SearchLoader.DATE_PARAM));
-        Assert.assertEquals(limit, params.get(SearchLoader.LIMIT_PARAM));
-        Assert.assertEquals(page, params.get(SearchLoader.PAGE_PARAM));
-        Assert.assertEquals(place, params.get(SearchLoader.PLACE_PARAM));
-        Assert.assertEquals(reg, params.get(SearchLoader.REG_PARAM));
-        Assert.assertEquals(remark, params.get(SearchLoader.REMARK_PARAM));
-        Assert.assertEquals(year, params.get(SearchLoader.YEAR_PARAM));
-    }
-
     public void testSearchLoader() throws Exception {
-        SearchLoader.RequestBuilder rb = new SearchLoader.RequestBuilder();
-        rb.setAircraft("Boeing 777");
-        rb.setAirline("Nord Wind");
-        rb.setLimit(40);
+        SearchParams searchParams = new SearchParams();
+        searchParams.setAircraft("Boeing 777");
+        searchParams.setAirline("Nord Wind");
+        searchParams.setLimit(40);
 
         final CountDownLatch cdl = new CountDownLatch(1);
-        rb.execute(searchLoader, new BaseLoader.BaseLoaderCallback<SearchResult>() {
+        searchLoader.load(searchParams.toLoaderParam(), new BaseLoader.BaseLoaderCallback<SearchResult>() {
             private boolean loadStartedCalled = false;
 
             @Override

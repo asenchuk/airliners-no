@@ -6,7 +6,9 @@ import android.support.v4.app.Fragment;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import net.taviscaron.airliners.R;
+import net.taviscaron.airliners.adapters.SearchResultsAdapter;
 import net.taviscaron.airliners.fragments.SearchResultsFragment;
+import net.taviscaron.airliners.model.SearchParams;
 import net.taviscaron.airliners.util.TabUtil;
 
 public class MainActivity extends SherlockFragmentActivity implements SearchResultsFragment.OnShowAircraftInfoListener {
@@ -24,14 +26,14 @@ public class MainActivity extends SherlockFragmentActivity implements SearchResu
         TabUtil.addFragmentTab(this, R.string.tab_top15_title,  TOP15_TAB_TAG, new TabUtil.FragmentCreator() {
             @Override
             public Fragment createFragment() {
-                return new SearchResultsFragment(SearchResultsFragment.LoaderType.TOP15);
+                return SearchResultsFragment.newInstance(SearchResultsAdapter.LoaderType.TOP15, new SearchParams());
             }
         });
 
         TabUtil.addFragmentTab(this, R.string.tab_top_title, TOP_TAB_TAG, new TabUtil.FragmentCreator() {
             @Override
             public Fragment createFragment() {
-                return new SearchResultsFragment(SearchResultsFragment.LoaderType.TOP);
+                return SearchResultsFragment.newInstance(SearchResultsAdapter.LoaderType.TOP, new SearchParams());
             }
         });
 
