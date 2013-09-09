@@ -20,6 +20,8 @@ public class SearchResultsFragment extends Fragment {
     private static final String LOADER_TYPE_KEY = "loaderType";
     private static final String SEARCH_PARAMS_KEY = "searchParams";
 
+    private static final int DEFAULT_ITEMS_PER_PAGE = 50;
+
     public interface OnShowAircraftInfoListener {
         public void showAircraftInfo(String id);
     }
@@ -70,7 +72,7 @@ public class SearchResultsFragment extends Fragment {
             Bundle args = getArguments();
             SearchResultsAdapter.LoaderType loaderType = SearchResultsAdapter.LoaderType.values()[args.getInt(LOADER_TYPE_KEY)];
             SearchParams params = (SearchParams)args.getSerializable(SEARCH_PARAMS_KEY);
-            adapter = new SearchResultsAdapter(getActivity(), searchResultsAdapterListener, loaderType, params, 12);
+            adapter = new SearchResultsAdapter(getActivity(), searchResultsAdapterListener, loaderType, params, DEFAULT_ITEMS_PER_PAGE);
         }
     }
 
