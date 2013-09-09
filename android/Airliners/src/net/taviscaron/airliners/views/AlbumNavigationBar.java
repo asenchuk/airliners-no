@@ -3,7 +3,7 @@ package net.taviscaron.airliners.views;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import net.taviscaron.airliners.R;
@@ -20,8 +20,8 @@ public class AlbumNavigationBar extends LinearLayout {
 
     private AlbumNavigationBarListener listener;
     private TextView positionText;
-    private Button prevButton;
-    private Button nextButton;
+    private ImageButton prevButton;
+    private ImageButton nextButton;
     private long position;
     private long count;
 
@@ -43,7 +43,7 @@ public class AlbumNavigationBar extends LinearLayout {
     private void init() {
         View.inflate(getContext(), R.layout.album_navigation_bar, this);
 
-        prevButton = (Button)findViewById(R.id.album_navigation_bar_prev_button);
+        prevButton = (ImageButton)findViewById(R.id.album_navigation_bar_prev_button);
         prevButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -53,7 +53,7 @@ public class AlbumNavigationBar extends LinearLayout {
             }
         });
 
-        nextButton = (Button)findViewById(R.id.album_navigation_bar_next_button);
+        nextButton = (ImageButton)findViewById(R.id.album_navigation_bar_next_button);
         nextButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -90,7 +90,7 @@ public class AlbumNavigationBar extends LinearLayout {
         }
     }
 
-    private void setButtonEnabled(Button button, boolean enabled) {
+    private void setButtonEnabled(ImageButton button, boolean enabled) {
         button.setEnabled(enabled);
         UIUtil.setAlpha(button, (enabled) ? 1 : DISABLED_BUTTON_ALPHA);
     }
