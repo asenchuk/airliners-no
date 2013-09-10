@@ -1,11 +1,9 @@
 package net.taviscaron.airliners.util;
 
+import android.content.Context;
 import android.util.Log;
 
-import java.io.Closeable;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 
 /**
  * Common IO util
@@ -36,5 +34,27 @@ public class IOUtil {
                 Log.w(TAG, "Can't close " + closeable, e);
             }
         }
+    }
+
+    public static File getExternalCacheDir(Context context, String subdir) {
+        File externalCacheDir = context.getExternalCacheDir();
+
+        File nomedia = new File(externalCacheDir, ".nomedia");
+        if(!nomedia.exists()) {
+            try {
+                nomedia.createNewFile();
+            } catch (IOException e) {
+                Log.w(TAG, "Can't create .nomedia: " + nomedia, e);
+            }
+        }
+
+        File cache = new File(externalCacheDir, subdir);
+        if(!cache.exists()) {
+            if(!cache.mkdirs()) {
+                Log.w(TAG, "Can't create cache dir");
+            }
+        }
+
+        return cache;
     }
 }

@@ -31,7 +31,7 @@ public class ImageLoader {
     public static final String IMAGE_CACHE_TAG = "image";
 
     private final Context context;
-    private final String cacheBaseDir;
+    private final File cacheBaseDir;
     private final Handler handler;
     private final URLStreamHandler urlStreamHandler;
 
@@ -47,16 +47,9 @@ public class ImageLoader {
 
     public ImageLoader(Context context, String cacheTag, URLStreamHandler urlStreamHandler) {
         this.context = context.getApplicationContext();
-        this.cacheBaseDir = context.getExternalCacheDir().getAbsolutePath() + File.separatorChar + cacheTag;
+        this.cacheBaseDir = IOUtil.getExternalCacheDir(context, cacheTag);
         this.handler = new Handler(Looper.getMainLooper());
         this.urlStreamHandler = urlStreamHandler;
-
-        File cacheBaseFile = new File(cacheBaseDir);
-        if(!cacheBaseFile.exists()) {
-            if(!cacheBaseFile.mkdirs()) {
-                Log.w(TAG, "Can't create cache dir");
-            }
-        }
     }
 
     public void loadImage(String url, ImageLoaderCallback callback) {
