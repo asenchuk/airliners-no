@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import net.taviscaron.airliners.util.IOUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -77,7 +78,7 @@ public class SetWallpaperActivity extends Activity {
             intent.setData(Uri.fromFile(new File(imagePath)));
 
             try {
-                tempFile = File.createTempFile("wallpaper", null);
+                tempFile = IOUtil.createTempFile(this, "wallpaper");
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(tempFile));
             } catch (IOException e) {
                 Log.d(TAG, "Can't create temp file", e);

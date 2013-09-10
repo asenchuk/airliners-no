@@ -12,6 +12,7 @@ import java.io.*;
 public class IOUtil {
     public static final String TAG = "IOUtil";
     public static final int DEFAULT_BUFFER_SIZE = 1024;
+    public static final String TMP_DIR_NAME = "temp";
 
     public static void copy(InputStream in, OutputStream out, int bufferSize) throws IOException {
         byte[] buffer = new byte[bufferSize];
@@ -38,8 +39,30 @@ public class IOUtil {
 
     public static File getExternalCacheDir(Context context, String subdir) {
         File externalCacheDir = context.getExternalCacheDir();
+        placeNoMedia(externalCacheDir);
+        File cache = new File(externalCacheDir, subdir);
+        ensureDirectoryExist(cache);
+        return cache;
+    }
 
-        File nomedia = new File(externalCacheDir, ".nomedia");
+    public static File getExternalFilesDir(Context context, String subdir) {
+        File filesBaseDir = context.getExternalFilesDir(null);
+        placeNoMedia(filesBaseDir);
+        File externalFilesDir = new File(filesBaseDir, subdir);
+        ensureDirectoryExist(externalFilesDir);
+        return externalFilesDir;
+    }
+
+    public static File getTempDir(Context context) {
+        return getExternalCacheDir(context, TMP_DIR_NAME);
+    }
+
+    public static File createTempFile(Context context, String prefix) throws IOException {
+        return File.createTempFile(prefix, null, getTempDir(context));
+    }
+
+    public static void placeNoMedia(File path) {
+        File nomedia = new File(path, ".nomedia");
         if(!nomedia.exists()) {
             try {
                 nomedia.createNewFile();
@@ -47,14 +70,13 @@ public class IOUtil {
                 Log.w(TAG, "Can't create .nomedia: " + nomedia, e);
             }
         }
+    }
 
-        File cache = new File(externalCacheDir, subdir);
-        if(!cache.exists()) {
-            if(!cache.mkdirs()) {
-                Log.w(TAG, "Can't create cache dir");
+    public static void ensureDirectoryExist(File path) {
+        if(!path.exists()) {
+            if(!path.mkdirs()) {
+                Log.w(TAG, "Can't create dirs: " + path);
             }
         }
-
-        return cache;
     }
 }
