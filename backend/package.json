@@ -2,8 +2,13 @@
   "name": "airliners-api",
   "description": "Airliners.net API",
   "author": "Andrei Senchuk <taviscaron@yandex.ru>",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node app.js"
+  },
   "dependencies": {
-    "cheerio": "*",
-    "router": "*"
+    "express": "*",
+    "cheerio": "*"
   }
 }

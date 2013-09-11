@@ -1,44 +1,37 @@
-/* http://airliners.net galery API */
+/* http://airliners.net gallery API */
 
-var airliners = require('./airliners');
-var config = require('./config');
+var controllers = require('./controllers');
+var middleware = require('./middleware');
+var express = require('express');
 var http = require('http');
-var url = require('url');
-var router = require('router')();
 
-function perform(req, res, f) {
-    var handler = function(error, result) {
-        if(error) {
-            res.writeHead((error >= 400) ? error : 503);
-            res.end(desc);
-        } else {
-            res.writeHead(200);
-            res.end(JSON.stringify(result));
-        }
-    }
-    
-    var args = Array.prototype.slice.call(arguments, 3);
-    args.push(handler);
-    
-    airliners[f].apply(airliners, args);
-}
+var app = express();
 
-router.get('/search', function(req, res) {
-    var query = url.parse(req.url, true).query;
-    perform(req, res, "search", query);
+/* configuration */
+app.use(express.compress());
+app.use(express.bodyParser());
+app.use(express.methodOverride());
+app.use(middleware.apiParams());
+app.use(app.router);
+
+app.use(function(error, req, res, next) {
+console.log(error);
+    res.send(500);
 });
 
-router.get('/top15', function(req, res) {
-    perform(req, res, "loadTop15");
-});
+/* routes */
+app.get('/search', controllers.search);
+app.post('/search', controllers.search);
 
-router.get('/top', function(req, res) {
-    var query = url.parse(req.url, true).query;
-    perform(req, res, "loadTop", query.limit, query.page);
-});
+app.get('/top15', controllers.top15);
+app.post('/top15', controllers.top15);
 
-router.get('/photo/{id}([0-9]+)', function(req, res) {
-    perform(req, res, "loadPhotoById", req.params.id);
-});
+app.get('/top', controllers.top);
+app.post('/top', controllers.top);
 
-http.createServer(router).listen(config.port);
+app.get('/photo/:id([0-9]+)', controllers.photo);
+
+app.all('*', controllers.default);
+
+/* start up */
+http.createServer(app).listen(process.env.VMC_APP_PORT || 1337);
