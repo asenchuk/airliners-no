@@ -2,6 +2,9 @@
 
 var airliners = require('./airliners');
 
+var PHOTO_CACHE_COLLECTION_NAME = 'photos';
+var PHOTO_CACHE_EXPIRATION = 24 * 60 * 60 * 1000;
+
 function perform(req, res, f) {
     var handler = function(error, result) {
         if(error) {
@@ -18,19 +21,47 @@ function perform(req, res, f) {
 }
 
 exports.search = function(req, res) {
-    perform(req, res, "search", req.apiParams);
+    perform(req, res, 'search', req.apiParams);
 };
 
 exports.top15 = function(req, res) {
-    perform(req, res, "loadTop15");
+    perform(req, res, 'loadTop15');
 };
 
 exports.top = function(req, res) {
-    perform(req, res, "loadTop", req.apiParams.limit, req.apiParams.page);
+    perform(req, res, 'loadTop', req.apiParams.limit, req.apiParams.page);
 };
 
 exports.photo = function(req, res) {
-    perform(req, res, "loadPhotoById", req.params.id);
+    var id = req.params.id;
+    req.mongo.collection(PHOTO_CACHE_COLLECTION_NAME, function(err, coll) {
+        coll.find({
+            _id: id,
+            timestamp: {'$gte': new Date().getTime() - PHOTO_CACHE_EXPIRATION}
+        }).nextObject(function(err, entry) {
+            if(entry) {
+                res.json(entry.photo);
+            } else {
+                airliners.loadPhotoById(id, function(error, result) {
+                    if(error) {
+                        res.send((error >= 400) ? error : 500, result);
+                    } else {
+                        res.json(result);
+
+                        var cacheObj = {
+                            _id: result.id,
+                            timestamp: new Date().getTime(),
+                            photo: result
+                        }
+
+                        coll.save(cacheObj, function(err, doc) {
+                            // noop
+                        });
+                    }
+                });
+            }
+        });
+    });
 };
 
 exports.default = function(req, res) {
