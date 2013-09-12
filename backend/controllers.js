@@ -4,6 +4,7 @@ var airliners = require('./airliners');
 
 var PHOTO_CACHE_COLLECTION_NAME = 'photos';
 var PHOTO_CACHE_EXPIRATION = 24 * 60 * 60 * 1000;
+var TOP15_CACHE_EXPIRATION = 6 * 60 * 60 * 1000;
 
 function perform(req, res, f) {
     var handler = function(error, result) {
@@ -24,9 +25,27 @@ exports.search = function(req, res) {
     perform(req, res, 'search', req.apiParams);
 };
 
-exports.top15 = function(req, res) {
-    perform(req, res, 'loadTop15');
-};
+exports.top15 = function() {
+    var lastUpdateTimestamp = 0;
+    var lastResult;
+
+    return function(req, res) {
+        if(lastUpdateTimestamp >= new Date().getTime() - TOP15_CACHE_EXPIRATION) {
+            res.send(lastResult);
+        } else {
+            airliners.loadTop15(function(err, result) {
+                if(err) {
+                    res.send((error >= 400) ? error : 500, result);
+                } else {
+                    res.json(result);
+
+                    lastResult = result;
+                    lastUpdateTimestamp = new Date().getTime();
+                }
+            });
+        }
+    }
+}();
 
 exports.top = function(req, res) {
     perform(req, res, 'loadTop', req.apiParams.limit, req.apiParams.page);
