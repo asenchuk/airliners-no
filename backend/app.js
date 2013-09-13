@@ -31,7 +31,6 @@ app.use(mongo.init(mongoConfig));
 app.use(app.router);
 
 app.use(function(error, req, res, next) {
-console.log(error);
     res.send(500);
 });
 
