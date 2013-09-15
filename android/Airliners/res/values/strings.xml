@@ -5,6 +5,7 @@
     <!-- tabs -->
     <string name="tab_top15_title">TOP 15</string>
     <string name="tab_top_title">TOP</string>
+    <string name="tab_search_title">Search</string>
 
     <!-- search item -->
     <string name="aircraft_item_aircraft_group_title">Aircraft</string>
@@ -24,5 +25,27 @@
     <!-- actions -->
     <string name="action_set_wallpaper">Set as wallpaper&#8230;</string>
     <string name="action_share">Share&#8230;</string>
+
+    <!-- search -->
+    <string name="search_group_aircraft">Aircraft</string>
+    <string name="search_group_location_date">Location &amp; Date</string>
+    <string name="search_group_identity">Identity</string>
+    <string name="search_group_other">Other</string>
+
+    <string name="search_param_aircraft_hint">Aircraft Type/Version</string>
+    <string name="search_param_airline_hint">Airline or other owner</string>
+    <string name="search_param_place_hint">Airport or other location</string>
+    <string name="search_param_country_hint">Country or State/Province for USA/Canada</string>
+    <string name="search_param_date_hint">Date photo was shot</string>
+    <string name="search_param_year_hint">Year the photo was taken</string>
+    <string name="search_param_reg_hint">Aircraft registration number</string>
+    <string name="search_param_cn_hint">Aircraft cn</string>
+    <string name="search_param_code_hint">Aircraft code</string>
+    <string name="search_param_remark_hint">Remark field</string>
+
+    <string name="search_button_go_title">Search</string>
+    <string name="search_button_clear_title">Clear</string>
+
+    <string name="search_empty_params_toast">Please fill at least one field!</string>
 
 </resources>

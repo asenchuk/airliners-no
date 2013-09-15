@@ -17,8 +17,8 @@ import net.taviscaron.airliners.model.SearchParams;
  * @author Andrei Senchuk
  */
 public class SearchResultsFragment extends Fragment {
-    private static final String LOADER_TYPE_KEY = "loaderType";
-    private static final String SEARCH_PARAMS_KEY = "searchParams";
+    public static final String LOADER_TYPE_KEY = "loaderType";
+    public static final String SEARCH_PARAMS_KEY = "searchParams";
 
     private static final int DEFAULT_ITEMS_PER_PAGE = 50;
 

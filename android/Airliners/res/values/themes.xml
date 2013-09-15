@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+  <style name="MainTheme" parent="Theme.Sherlock">
+    <item name="android:editTextStyle">@style/EditText</item>
+    <item name="android:buttonStyle">@style/Button</item>
+    <item name="android:imageButtonStyle">@style/ImageButton</item>
+  </style>
+</resources>

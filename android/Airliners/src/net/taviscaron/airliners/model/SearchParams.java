@@ -1,5 +1,6 @@
 package net.taviscaron.airliners.model;
 
+import android.text.TextUtils;
 import net.taviscaron.airliners.util.Validate;
 
 import java.io.Serializable;
@@ -34,7 +35,7 @@ public class SearchParams implements Serializable {
     private String cn;
     private String code;
     private String date;
-    private Integer year;
+    private String year;
     private Integer limit = DEFAULT_LIMIT;
     private Integer page = 1;
 
@@ -110,11 +111,11 @@ public class SearchParams implements Serializable {
         this.date = date;
     }
 
-    public Integer getYear() {
+    public String getYear() {
         return year;
     }
 
-    public void setYear(Integer year) {
+    public void setYear(String year) {
         this.year = year;
     }
 
@@ -136,6 +137,21 @@ public class SearchParams implements Serializable {
         Validate.notNull(page, "page should be not null");
         Validate.makeSure(page >= 1, "page should be >= 1");
         this.page = page;
+    }
+
+    public boolean isEmpty() {
+        boolean empty = true;
+        empty = empty && TextUtils.isEmpty(aircraft);
+        empty = empty && TextUtils.isEmpty(airline);
+        empty = empty && TextUtils.isEmpty(place);
+        empty = empty && TextUtils.isEmpty(country);
+        empty = empty && TextUtils.isEmpty(date);
+        empty = empty && TextUtils.isEmpty(year);
+        empty = empty && TextUtils.isEmpty(reg);
+        empty = empty && TextUtils.isEmpty(cn);
+        empty = empty && TextUtils.isEmpty(code);
+        empty = empty && TextUtils.isEmpty(remark);
+        return empty;
     }
 
     public Object toLoaderParam() {

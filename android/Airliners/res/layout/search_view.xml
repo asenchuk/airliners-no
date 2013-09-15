@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            <TextView
+                    android:layout_height="wrap_content"
+                    android:layout_width="fill_parent"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginBottom="2dp"
+                    android:text="@string/search_group_aircraft"
+                    style="@style/AircraftItemAttributesGroupHeader"/>
+
+            <EditText
+                    android:id="@+id/search_param_aircraft"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:hint="@string/search_param_aircraft_hint"/>
+
+            <EditText
+                    android:id="@+id/search_param_airline"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:hint="@string/search_param_airline_hint"/>
+
+            <TextView
+                    android:layout_height="wrap_content"
+                    android:layout_width="fill_parent"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginBottom="2dp"
+                    android:text="@string/search_group_location_date"
+                    style="@style/AircraftItemAttributesGroupHeader"/>
+
+            <EditText
+                    android:id="@+id/search_param_place"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:hint="@string/search_param_place_hint"/>
+
+            <EditText
+                    android:id="@+id/search_param_country"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:hint="@string/search_param_country_hint"/>
+
+            <EditText
+                    android:id="@+id/search_param_date"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:hint="@string/search_param_date_hint"/>
+
+            <EditText
+                    android:id="@+id/search_param_year"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:hint="@string/search_param_year_hint"/>
+
+            <TextView
+                    android:layout_height="wrap_content"
+                    android:layout_width="fill_parent"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginBottom="2dp"
+                    android:text="@string/search_group_identity"
+                    style="@style/AircraftItemAttributesGroupHeader"/>
+
+            <EditText
+                    android:id="@+id/search_param_reg"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:hint="@string/search_param_reg_hint"/>
+
+            <EditText
+                    android:id="@+id/search_param_cn"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:hint="@string/search_param_cn_hint"/>
+
+            <EditText
+                    android:id="@+id/search_param_code"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:hint="@string/search_param_code_hint"/>
+
+            <TextView
+                    android:layout_height="wrap_content"
+                    android:layout_width="fill_parent"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginBottom="2dp"
+                    android:text="@string/search_group_other"
+                    style="@style/AircraftItemAttributesGroupHeader"/>
+
+            <EditText
+                    android:id="@+id/search_param_remark"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:hint="@string/search_param_remark_hint"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:paddingTop="3dp"
+            android:paddingBottom="3dp"
+            android:background="@drawable/bottom_bar_background">
+
+        <Button
+                android:id="@+id/search_button_go"
+                android:layout_height="match_parent"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:text="@string/search_button_go_title"
+                android:layout_gravity="center"/>
+
+        <Button
+                android:id="@+id/search_button_clear"
+                android:layout_height="match_parent"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:text="@string/search_button_clear_title"
+                android:layout_gravity="center"/>
+
+    </LinearLayout>
+
+</LinearLayout>
