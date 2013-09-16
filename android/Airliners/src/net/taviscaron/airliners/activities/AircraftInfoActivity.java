@@ -122,10 +122,12 @@ public class AircraftInfoActivity extends SherlockFragmentActivity implements Ai
     public void onAircraftInfoLoaded(AircraftPhoto photo) {
         albumNavigationBar.setEnabled(true);
 
-        long count = photo.getCount();
-        long pos = photo.getPos();
-        if(pos >= 0 && pos <= count) {
-            albumNavigationBar.setPosition(pos, count);
+        if(photo != null) {
+            long count = photo.getCount();
+            long pos = photo.getPos();
+            if(pos >= 0 && pos <= count) {
+                albumNavigationBar.setPosition(pos, count);
+            }
         }
     }
 
