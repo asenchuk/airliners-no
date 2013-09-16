@@ -68,9 +68,9 @@ public class AircraftInfoFragment extends Fragment {
         }
     };
 
-    private final AircraftPhotoLoader.BaseLoaderCallback<AircraftPhoto> aircraftPhotoLoader = new AircraftPhotoLoader.BaseLoaderCallback<AircraftPhoto>() {
+    private final AircraftPhotoLoader.BaseLoaderCallback<String, AircraftPhoto> aircraftPhotoLoader = new AircraftPhotoLoader.BaseLoaderCallback<String, AircraftPhoto>() {
         @Override
-        public void loadStarted(BaseLoader<AircraftPhoto> loader) {
+        public void loadStarted(BaseLoader<String, AircraftPhoto> loader) {
             notifyOnAircraftInfoLoadStarted(initialAircraftId);
             View view = getView();
             if(view != null) {
@@ -80,7 +80,7 @@ public class AircraftInfoFragment extends Fragment {
         }
 
         @Override
-        public void loadFinished(BaseLoader<AircraftPhoto> loader, AircraftPhoto obj) {
+        public void loadFinished(BaseLoader<String, AircraftPhoto> loader, AircraftPhoto obj) {
             notifyOnAircraftInfoLoaded(obj);
             View view = getView();
             if(view != null) {

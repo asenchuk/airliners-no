@@ -3,7 +3,6 @@ package net.taviscaron.airliners.data;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
-import android.text.TextUtils;
 import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -13,22 +12,22 @@ import net.taviscaron.airliners.util.IOUtil;
 
 import java.io.*;
 import java.net.*;
-import java.util.Map;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 /**
  * Entities base loader
- * @param <T> entity type
+ * @param <P> param type
+ * @param <T> result type
  */
-public abstract class BaseLoader<T> {
+public abstract class BaseLoader<P, T> {
     private static final String TAG = "BaseLoader";
     protected static final Executor executor = Executors.newCachedThreadPool();
     protected static final Gson gson = new GsonBuilder().create();
 
-    public static interface BaseLoaderCallback<T> {
-        public void loadStarted(BaseLoader<T> loader);
-        public void loadFinished(BaseLoader<T> loader, T obj);
+    public interface BaseLoaderCallback<P, T> {
+        public void loadStarted(BaseLoader<P, T> loader);
+        public void loadFinished(BaseLoader<P, T> loader, T obj);
     }
 
     protected final Handler handler;
@@ -58,41 +57,18 @@ public abstract class BaseLoader<T> {
         this.clazz = clazz;
     }
 
-    protected String requestURLFromParams(Object param) {
-        @SuppressWarnings("unchecked")
-        Map<String, Object> params = (Map<String, Object>)param;
-        String url = baseUrl;
-
-        if(params != null) {
-            String[] stringParams = new String[params.size()];
-            int i = 0;
-            for(String key : params.keySet()) {
-                String value = params.get(key).toString();
-
-                try {
-                    key = URLEncoder.encode(key, "UTF-8");
-                    value = URLEncoder.encode(value, "UTF-8");
-                    stringParams[i++] = String.format("%s=%s", key, value);
-                } catch (UnsupportedEncodingException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-
-            String requestString = TextUtils.join("&", stringParams);
-
-            if(baseUrl.indexOf("?") != -1) {
-                url = url + "&" + requestString;
-            } else {
-                url = url + "?" + requestString;
-            }
-        }
-
-        return url;
+    protected String requestURLFromParam(P param) {
+        return baseUrl;
     }
 
-    public void load(Object param, BaseLoaderCallback<T> callback) {
-        final String url = requestURLFromParams(param);
-        final BaseLoaderCallback<T> finalCallback = callback;
+    protected void customizeHttpURLConnectionForParam(P param, HttpURLConnection urlConnection) throws IOException {
+        // noop
+    }
+
+    public void load(P param, BaseLoaderCallback<P, T> callback) {
+        final String url = requestURLFromParam(param);
+        final BaseLoaderCallback<P, T> finalCallback = callback;
+        final P finalParam = param;
 
         callbackLoadStarted(callback);
         executor.execute(new Runnable() {
@@ -104,6 +80,8 @@ public abstract class BaseLoader<T> {
                 try {
                     URL connectionUrl = new URL(null, url, urlStreamHandler);
                     HttpURLConnection connection = (HttpURLConnection)connectionUrl.openConnection();
+
+                    customizeHttpURLConnectionForParam(finalParam, connection);
 
                     if(connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
                         InputStream is = connection.getInputStream();
@@ -125,7 +103,7 @@ public abstract class BaseLoader<T> {
         });
     }
 
-    protected void callbackLoadStarted(final BaseLoaderCallback<T> callback) {
+    protected void callbackLoadStarted(final BaseLoaderCallback<P, T> callback) {
         handler.post(new Runnable() {
             @Override
             public void run() {
@@ -134,7 +112,7 @@ public abstract class BaseLoader<T> {
         });
     }
 
-    protected void callbackLoadFinished(final BaseLoaderCallback<T> callback, final T obj) {
+    protected void callbackLoadFinished(final BaseLoaderCallback<P, T> callback, final T obj) {
         handler.post(new Runnable() {
             @Override
             public void run() {

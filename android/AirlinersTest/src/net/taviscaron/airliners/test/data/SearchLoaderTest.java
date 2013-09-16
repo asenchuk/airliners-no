@@ -39,18 +39,18 @@ public class SearchLoaderTest extends InstrumentationTestCase {
         searchParams.setLimit(40);
 
         final CountDownLatch cdl = new CountDownLatch(1);
-        searchLoader.load(searchParams.toLoaderParam(), new BaseLoader.BaseLoaderCallback<SearchResult>() {
+        searchLoader.load(searchParams, new BaseLoader.BaseLoaderCallback<SearchParams, SearchResult>() {
             private boolean loadStartedCalled = false;
 
             @Override
-            public void loadStarted(BaseLoader<SearchResult> loader) {
+            public void loadStarted(BaseLoader<SearchParams, SearchResult> loader) {
                 Assert.assertSame(Thread.currentThread(), Looper.getMainLooper().getThread());
                 Assert.assertEquals(searchLoader, loader);
                 loadStartedCalled = true;
             }
 
             @Override
-            public void loadFinished(BaseLoader<SearchResult> loader, SearchResult result) {
+            public void loadFinished(BaseLoader<SearchParams, SearchResult> loader, SearchResult result) {
                 Assert.assertSame(Thread.currentThread(), Looper.getMainLooper().getThread());
                 Assert.assertTrue("Load started should be called before load finished", loadStartedCalled);
                 Assert.assertEquals(searchLoader, loader);

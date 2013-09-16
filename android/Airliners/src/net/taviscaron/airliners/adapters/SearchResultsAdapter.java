@@ -53,14 +53,14 @@ public class SearchResultsAdapter extends BaseAdapter implements AbsListView.OnS
         public void loadFinished();
     }
 
-    private SearchLoader.BaseLoaderCallback<SearchResult> searchLoaderListener = new SearchLoader.BaseLoaderCallback<SearchResult>() {
+    private SearchLoader.BaseLoaderCallback<SearchParams, SearchResult> searchLoaderListener = new SearchLoader.BaseLoaderCallback<SearchParams, SearchResult>() {
         @Override
-        public void loadStarted(BaseLoader<SearchResult> loader) {
+        public void loadStarted(BaseLoader<SearchParams, SearchResult> loader) {
             listener.loadStarted();
         }
 
         @Override
-        public void loadFinished(BaseLoader<SearchResult> loader, SearchResult obj) {
+        public void loadFinished(BaseLoader<SearchParams, SearchResult> loader, SearchResult obj) {
             listener.loadFinished();
 
             isLoading = false;
@@ -216,7 +216,7 @@ public class SearchResultsAdapter extends BaseAdapter implements AbsListView.OnS
     private void loadResults() {
         if(!isLoading) {
             isLoading = true;
-            searchLoader.load(params.toLoaderParam(), searchLoaderListener);
+            searchLoader.load(params, searchLoaderListener);
         }
     }
 

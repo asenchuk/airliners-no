@@ -29,18 +29,18 @@ public class AircraftPhotoLoaderTest extends InstrumentationTestCase {
 
     public void testNormalLoad() throws Exception {
         final CountDownLatch cdl = new CountDownLatch(1);
-        loader.load("123456", new BaseLoader.BaseLoaderCallback<AircraftPhoto>() {
+        loader.load("123456", new BaseLoader.BaseLoaderCallback<String, AircraftPhoto>() {
             private boolean loadStartedCalled = false;
 
             @Override
-            public void loadStarted(BaseLoader<AircraftPhoto> loader) {
+            public void loadStarted(BaseLoader<String, AircraftPhoto> loader) {
                 Assert.assertSame(Thread.currentThread(), Looper.getMainLooper().getThread());
                 Assert.assertEquals(AircraftPhotoLoaderTest.this.loader, loader);
                 loadStartedCalled = true;
             }
 
             @Override
-            public void loadFinished(BaseLoader<AircraftPhoto> loader, AircraftPhoto photo) {
+            public void loadFinished(BaseLoader<String, AircraftPhoto> loader, AircraftPhoto photo) {
                 Assert.assertSame(Thread.currentThread(), Looper.getMainLooper().getThread());
                 Assert.assertTrue("Load started should be called before load finished", loadStartedCalled);
                 Assert.assertEquals(AircraftPhotoLoaderTest.this.loader, loader);
@@ -68,18 +68,18 @@ public class AircraftPhotoLoaderTest extends InstrumentationTestCase {
 
     public void testNotExistentIdLoad() throws Exception {
         final CountDownLatch cdl = new CountDownLatch(1);
-        loader.load("0000000", new BaseLoader.BaseLoaderCallback<AircraftPhoto>() {
+        loader.load("0000000", new BaseLoader.BaseLoaderCallback<String, AircraftPhoto>() {
             private boolean loadStartedCalled = false;
 
             @Override
-            public void loadStarted(BaseLoader<AircraftPhoto> loader) {
+            public void loadStarted(BaseLoader<String, AircraftPhoto> loader) {
                 Assert.assertSame(Thread.currentThread(), Looper.getMainLooper().getThread());
                 Assert.assertEquals(AircraftPhotoLoaderTest.this.loader, loader);
                 loadStartedCalled = true;
             }
 
             @Override
-            public void loadFinished(BaseLoader<AircraftPhoto> loader, AircraftPhoto photo) {
+            public void loadFinished(BaseLoader<String, AircraftPhoto> loader, AircraftPhoto photo) {
                 Assert.assertSame(Thread.currentThread(), Looper.getMainLooper().getThread());
                 Assert.assertTrue("Load started should be called before load finished", loadStartedCalled);
                 Assert.assertEquals(AircraftPhotoLoaderTest.this.loader, loader);
@@ -92,18 +92,18 @@ public class AircraftPhotoLoaderTest extends InstrumentationTestCase {
 
     public void testExtraAttributesAndAttributesMissingLoad() throws Exception {
         final CountDownLatch cdl = new CountDownLatch(1);
-        loader.load("123457", new BaseLoader.BaseLoaderCallback<AircraftPhoto>() {
+        loader.load("123457", new BaseLoader.BaseLoaderCallback<String, AircraftPhoto>() {
             private boolean loadStartedCalled = false;
 
             @Override
-            public void loadStarted(BaseLoader<AircraftPhoto> loader) {
+            public void loadStarted(BaseLoader<String, AircraftPhoto> loader) {
                 Assert.assertSame(Thread.currentThread(), Looper.getMainLooper().getThread());
                 Assert.assertEquals(AircraftPhotoLoaderTest.this.loader, loader);
                 loadStartedCalled = true;
             }
 
             @Override
-            public void loadFinished(BaseLoader<AircraftPhoto> loader, AircraftPhoto photo) {
+            public void loadFinished(BaseLoader<String, AircraftPhoto> loader, AircraftPhoto photo) {
                 Assert.assertSame(Thread.currentThread(), Looper.getMainLooper().getThread());
                 Assert.assertTrue("Load started should be called before load finished", loadStartedCalled);
                 Assert.assertEquals(AircraftPhotoLoaderTest.this.loader, loader);

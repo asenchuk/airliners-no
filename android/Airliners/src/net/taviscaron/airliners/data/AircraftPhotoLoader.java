@@ -9,7 +9,7 @@ import java.net.URLStreamHandler;
  * AircraftPhoto loader
  * @author Andrei Senchuk
  */
-public class AircraftPhotoLoader extends BaseLoader<AircraftPhoto> {
+public class AircraftPhotoLoader extends BaseLoader<String, AircraftPhoto> {
     public AircraftPhotoLoader(Context context) {
         super(context, "/photo/", AircraftPhoto.class);
     }
@@ -19,7 +19,7 @@ public class AircraftPhotoLoader extends BaseLoader<AircraftPhoto> {
     }
 
     @Override
-    protected String requestURLFromParams(Object param) {
+    protected String requestURLFromParam(String param) {
         return baseUrl + param;
     }
 }

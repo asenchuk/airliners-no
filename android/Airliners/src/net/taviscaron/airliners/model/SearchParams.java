@@ -4,26 +4,12 @@ import android.text.TextUtils;
 import net.taviscaron.airliners.util.Validate;
 
 import java.io.Serializable;
-import java.util.HashMap;
 
 /**
  * Search params wrapper
  * @author Andrei Senchuk
  */
 public class SearchParams implements Serializable {
-    public static final String AIRCRAFT_PARAM = "aircraft";
-    public static final String AIRLINE_PARAM = "airline";
-    public static final String PLACE_PARAM = "place";
-    public static final String COUNTRY_PARAM = "country";
-    public static final String REMARK_PARAM = "remark";
-    public static final String REG_PARAM = "reg";
-    public static final String CN_PARAM = "cn";
-    public static final String CODE_PARAM = "code";
-    public static final String DATE_PARAM = "date";
-    public static final String YEAR_PARAM = "year";
-    public static final String LIMIT_PARAM = "limit";
-    public static final String PAGE_PARAM = "page";
-
     public static final Integer DEFAULT_LIMIT = 15;
 
     private String aircraft;
@@ -152,28 +138,5 @@ public class SearchParams implements Serializable {
         empty = empty && TextUtils.isEmpty(code);
         empty = empty && TextUtils.isEmpty(remark);
         return empty;
-    }
-
-    public Object toLoaderParam() {
-        HashMap<String, Object> params = new HashMap<String, Object>();
-        putValue(params, AIRCRAFT_PARAM, aircraft);
-        putValue(params, AIRLINE_PARAM, airline);
-        putValue(params, PLACE_PARAM, place);
-        putValue(params, COUNTRY_PARAM, country);
-        putValue(params, REMARK_PARAM, remark);
-        putValue(params, REG_PARAM, reg);
-        putValue(params, CN_PARAM, cn);
-        putValue(params, CODE_PARAM, code);
-        putValue(params, DATE_PARAM, date);
-        putValue(params, YEAR_PARAM, year);
-        putValue(params, LIMIT_PARAM, limit);
-        putValue(params, PAGE_PARAM, page);
-        return params;
-    }
-
-    private void putValue(HashMap<String, Object> map, String key, Object value) {
-        if(value != null) {
-            map.put(key, value);
-        }
     }
 }
