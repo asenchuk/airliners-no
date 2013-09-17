@@ -26,12 +26,16 @@
                     android:id="@+id/search_param_aircraft"
                     android:layout_height="wrap_content"
                     android:layout_width="match_parent"
+                    android:imeOptions="actionSearch"
+                    android:inputType="text"
                     android:hint="@string/search_param_aircraft_hint"/>
 
             <EditText
                     android:id="@+id/search_param_airline"
                     android:layout_height="wrap_content"
                     android:layout_width="match_parent"
+                    android:imeOptions="actionSearch"
+                    android:inputType="text"
                     android:hint="@string/search_param_airline_hint"/>
 
             <TextView
@@ -46,24 +50,32 @@
                     android:id="@+id/search_param_place"
                     android:layout_height="wrap_content"
                     android:layout_width="match_parent"
+                    android:imeOptions="actionSearch"
+                    android:inputType="text"
                     android:hint="@string/search_param_place_hint"/>
 
             <EditText
                     android:id="@+id/search_param_country"
                     android:layout_height="wrap_content"
                     android:layout_width="match_parent"
+                    android:imeOptions="actionSearch"
+                    android:inputType="text"
                     android:hint="@string/search_param_country_hint"/>
 
             <EditText
                     android:id="@+id/search_param_date"
                     android:layout_height="wrap_content"
                     android:layout_width="match_parent"
+                    android:imeOptions="actionSearch"
+                    android:inputType="date"
                     android:hint="@string/search_param_date_hint"/>
 
             <EditText
                     android:id="@+id/search_param_year"
                     android:layout_height="wrap_content"
                     android:layout_width="match_parent"
+                    android:imeOptions="actionSearch"
+                    android:inputType="text"
                     android:hint="@string/search_param_year_hint"/>
 
             <TextView
@@ -78,18 +90,24 @@
                     android:id="@+id/search_param_reg"
                     android:layout_height="wrap_content"
                     android:layout_width="match_parent"
+                    android:imeOptions="actionSearch"
+                    android:inputType="text"
                     android:hint="@string/search_param_reg_hint"/>
 
             <EditText
                     android:id="@+id/search_param_cn"
                     android:layout_height="wrap_content"
                     android:layout_width="match_parent"
+                    android:imeOptions="actionSearch"
+                    android:inputType="text"
                     android:hint="@string/search_param_cn_hint"/>
 
             <EditText
                     android:id="@+id/search_param_code"
                     android:layout_height="wrap_content"
                     android:layout_width="match_parent"
+                    android:imeOptions="actionSearch"
+                    android:inputType="text"
                     android:hint="@string/search_param_code_hint"/>
 
             <TextView
@@ -104,6 +122,8 @@
                     android:id="@+id/search_param_remark"
                     android:layout_height="wrap_content"
                     android:layout_width="match_parent"
+                    android:imeOptions="actionSearch"
+                    android:inputType="text"
                     android:hint="@string/search_param_remark_hint"/>
 
         </LinearLayout>

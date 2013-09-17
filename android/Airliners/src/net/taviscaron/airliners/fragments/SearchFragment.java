@@ -1,14 +1,15 @@
 package net.taviscaron.airliners.fragments;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import net.taviscaron.airliners.R;
 import net.taviscaron.airliners.model.SearchParams;
@@ -34,37 +35,67 @@ public class SearchFragment extends Fragment {
     private EditText codeEditText;
     private EditText remarkEditText;
 
+    private TextView.OnEditorActionListener onEditorActionListener = new TextView.OnEditorActionListener() {
+        @Override
+        public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+            if(actionId == EditorInfo.IME_ACTION_SEARCH) {
+                performSearch();
+                return true;
+            }
+            return false;
+        }
+    };
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.search_view, container, false);
 
         aircraftEditText = (EditText)view.findViewById(R.id.search_param_aircraft);
+        aircraftEditText.setOnEditorActionListener(onEditorActionListener);
+
         airlineEditText = (EditText)view.findViewById(R.id.search_param_airline);
+        airlineEditText.setOnEditorActionListener(onEditorActionListener);
+
         placeEditText = (EditText)view.findViewById(R.id.search_param_place);
+        placeEditText.setOnEditorActionListener(onEditorActionListener);
+
         countryEditText = (EditText)view.findViewById(R.id.search_param_country);
+        countryEditText.setOnEditorActionListener(onEditorActionListener);
+
         dateEditText = (EditText)view.findViewById(R.id.search_param_date);
+        dateEditText.setOnEditorActionListener(onEditorActionListener);
+
         yearEditText = (EditText)view.findViewById(R.id.search_param_year);
+        yearEditText.setOnEditorActionListener(onEditorActionListener);
+
         regEditText = (EditText)view.findViewById(R.id.search_param_reg);
+        regEditText.setOnEditorActionListener(onEditorActionListener);
+
         cnEditText = (EditText)view.findViewById(R.id.search_param_cn);
+        cnEditText.setOnEditorActionListener(onEditorActionListener);
+
         codeEditText = (EditText)view.findViewById(R.id.search_param_code);
+        codeEditText.setOnEditorActionListener(onEditorActionListener);
+
         remarkEditText = (EditText)view.findViewById(R.id.search_param_remark);
+        remarkEditText.setOnEditorActionListener(onEditorActionListener);
 
         view.findViewById(R.id.search_button_go).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                searchButtonTapped();
+                performSearch();
             }
         });
 
         view.findViewById(R.id.search_button_clear).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                clearButtonTapped();
+                clearFields();
             }
         });
 
         return view;
     }
 
-    private void searchButtonTapped() {
+    private void performSearch() {
         UIUtil.hideSoftKeyboard(getActivity());
 
         Activity activity = getActivity();
@@ -78,8 +109,9 @@ public class SearchFragment extends Fragment {
         }
     }
 
-    private void clearButtonTapped() {
+    private void clearFields() {
         UIUtil.hideSoftKeyboard(getActivity());
+
         aircraftEditText.setText(null);
         airlineEditText.setText(null);
         placeEditText.setText(null);
