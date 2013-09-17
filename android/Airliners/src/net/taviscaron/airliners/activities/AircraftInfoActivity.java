@@ -113,12 +113,10 @@ public class AircraftInfoActivity extends SherlockFragmentActivity implements Ai
         }
     }
 
-    @Override
     public void onAircraftInfoLoadStarted(String id) {
         albumNavigationBar.setEnabled(false);
     }
 
-    @Override
     public void onAircraftInfoLoaded(AircraftPhoto photo) {
         albumNavigationBar.setEnabled(true);
 
@@ -132,7 +130,6 @@ public class AircraftInfoActivity extends SherlockFragmentActivity implements Ai
     }
 
     private final AlbumNavigationBar.AlbumNavigationBarListener albumNavigationBarListener = new AlbumNavigationBar.AlbumNavigationBarListener() {
-        @Override
         public void next() {
             AircraftPhoto aircraftPhoto = fragment.getAircraftPhoto();
             if(aircraftPhoto != null && aircraftPhoto.getNext() != null) {
@@ -140,7 +137,6 @@ public class AircraftInfoActivity extends SherlockFragmentActivity implements Ai
             }
         }
 
-        @Override
         public void prev() {
             AircraftPhoto aircraftPhoto = fragment.getAircraftPhoto();
             if(aircraftPhoto != null && aircraftPhoto.getPrev() != null) {

@@ -99,9 +99,10 @@ public class ImageLoader {
             if(!bitmapFile.exists()) {
                 InputStream is = null;
                 OutputStream os = null;
+                HttpURLConnection connection = null;
                 try {
                     URL connectionUrl = new URL(null, url, urlStreamHandler);
-                    HttpURLConnection connection = (HttpURLConnection)connectionUrl.openConnection();
+                    connection = (HttpURLConnection)connectionUrl.openConnection();
 
                     if(connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
                         is = connection.getInputStream();
@@ -113,6 +114,7 @@ public class ImageLoader {
                 } catch (IOException e) {
                     Log.w(TAG, "IO was bad: " + url, e);
                 } finally {
+                    IOUtil.disconnect(connection);
                     IOUtil.close(is);
                     IOUtil.close(os);
                 }
@@ -130,7 +132,6 @@ public class ImageLoader {
 
     protected void callbackLoadStarted(final ImageLoaderCallback callback, final String url) {
         handler.post(new Runnable() {
-            @Override
             public void run() {
                 callback.imageLoadStarted(ImageLoader.this, url);
             }
@@ -139,7 +140,6 @@ public class ImageLoader {
 
     protected void callbackLoadFinished(final ImageLoaderCallback callback, final String url, final Bitmap result, final String imageCachePath) {
         handler.post(new Runnable() {
-            @Override
             public void run() {
                 if(result != null) {
                     callback.imageLoaded(ImageLoader.this, url, result, imageCachePath);

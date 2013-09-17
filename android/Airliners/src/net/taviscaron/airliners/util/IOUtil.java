@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import java.io.*;
+import java.net.HttpURLConnection;
 
 /**
  * Common IO util
@@ -34,6 +35,12 @@ public class IOUtil {
             } catch (IOException e) {
                 Log.w(TAG, "Can't close " + closeable, e);
             }
+        }
+    }
+
+    public static void disconnect(HttpURLConnection conn) {
+        if(conn != null) {
+            conn.disconnect();
         }
     }
 

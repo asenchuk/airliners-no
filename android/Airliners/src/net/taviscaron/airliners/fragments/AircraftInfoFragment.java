@@ -35,7 +35,6 @@ public class AircraftInfoFragment extends Fragment {
     }
 
     private final ImageLoader.ImageLoaderCallback imageLoaderCallback = new ImageLoader.ImageLoaderCallback() {
-        @Override
         public void imageLoaded(ImageLoader loader, String url, Bitmap bitmap, String imageCachePath) {
             aircraftPhotoPath = imageCachePath;
             View view = getView();
@@ -49,7 +48,6 @@ public class AircraftInfoFragment extends Fragment {
             }
         }
 
-        @Override
         public void imageLoadFailed(ImageLoader loader, String url) {
             View view = getView();
             if(view != null) {
@@ -58,7 +56,6 @@ public class AircraftInfoFragment extends Fragment {
             }
         }
 
-        @Override
         public void imageLoadStarted(ImageLoader loader, String url) {
             View view = getView();
             if(view != null) {
@@ -69,7 +66,6 @@ public class AircraftInfoFragment extends Fragment {
     };
 
     private final AircraftPhotoLoader.BaseLoaderCallback<String, AircraftPhoto> aircraftPhotoLoader = new AircraftPhotoLoader.BaseLoaderCallback<String, AircraftPhoto>() {
-        @Override
         public void loadStarted(BaseLoader<String, AircraftPhoto> loader) {
             notifyOnAircraftInfoLoadStarted(initialAircraftId);
             View view = getView();
@@ -79,7 +75,6 @@ public class AircraftInfoFragment extends Fragment {
             }
         }
 
-        @Override
         public void loadFinished(BaseLoader<String, AircraftPhoto> loader, AircraftPhoto obj) {
             notifyOnAircraftInfoLoaded(obj);
             View view = getView();

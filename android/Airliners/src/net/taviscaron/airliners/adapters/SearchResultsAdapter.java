@@ -54,12 +54,10 @@ public class SearchResultsAdapter extends BaseAdapter implements AbsListView.OnS
     }
 
     private SearchLoader.BaseLoaderCallback<SearchParams, SearchResult> searchLoaderListener = new SearchLoader.BaseLoaderCallback<SearchParams, SearchResult>() {
-        @Override
         public void loadStarted(BaseLoader<SearchParams, SearchResult> loader) {
             listener.loadStarted();
         }
 
-        @Override
         public void loadFinished(BaseLoader<SearchParams, SearchResult> loader, SearchResult obj) {
             listener.loadFinished();
 
@@ -157,7 +155,6 @@ public class SearchResultsAdapter extends BaseAdapter implements AbsListView.OnS
         holder.imageView.setOnClickListener(null);
         holder.imageView.setImageResource(android.R.color.transparent);
         imageLoader.loadImage(result.getThumbUrl(), new ImageLoader.ImageLoaderCallback() {
-            @Override
             public void imageLoaded(ImageLoader loader, String url, Bitmap bitmap, String imageCachePath) {
                 holder.imageLoadingProgressBar.setVisibility(View.GONE);
                 holder.imageView.setImageBitmap(bitmap);
@@ -170,12 +167,10 @@ public class SearchResultsAdapter extends BaseAdapter implements AbsListView.OnS
                 });
             }
 
-            @Override
             public void imageLoadFailed(ImageLoader loader, String url) {
                 holder.imageLoadingProgressBar.setVisibility(View.GONE);
             }
 
-            @Override
             public void imageLoadStarted(ImageLoader loader, String url) {
                 holder.imageLoadingProgressBar.setVisibility(View.VISIBLE);
                 holder.imageView.setVisibility(View.GONE);

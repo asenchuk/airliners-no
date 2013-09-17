@@ -77,9 +77,10 @@ public abstract class BaseLoader<P, T> {
                 T result = null;
 
                 Reader reader = null;
+                HttpURLConnection connection = null;
                 try {
                     URL connectionUrl = new URL(null, url, urlStreamHandler);
-                    HttpURLConnection connection = (HttpURLConnection)connectionUrl.openConnection();
+                    connection = (HttpURLConnection)connectionUrl.openConnection();
 
                     customizeHttpURLConnectionForParam(finalParam, connection);
 
@@ -95,6 +96,7 @@ public abstract class BaseLoader<P, T> {
                 } catch (JsonParseException e) {
                     Log.w(TAG, "Bad JSON", e);
                 } finally {
+                    IOUtil.disconnect(connection);
                     IOUtil.close(reader);
                 }
 
@@ -105,7 +107,6 @@ public abstract class BaseLoader<P, T> {
 
     protected void callbackLoadStarted(final BaseLoaderCallback<P, T> callback) {
         handler.post(new Runnable() {
-            @Override
             public void run() {
                 callback.loadStarted(BaseLoader.this);
             }
@@ -114,7 +115,6 @@ public abstract class BaseLoader<P, T> {
 
     protected void callbackLoadFinished(final BaseLoaderCallback<P, T> callback, final T obj) {
         handler.post(new Runnable() {
-            @Override
             public void run() {
                 callback.loadFinished(BaseLoader.this, obj);
             }
