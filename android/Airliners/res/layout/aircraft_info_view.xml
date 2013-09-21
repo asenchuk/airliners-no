@@ -43,7 +43,8 @@
                 <ImageView
                         android:id="@+id/aircraft_info_photo_view"
                         android:layout_width="fill_parent"
-                        android:layout_height="0dp"/>
+                        android:layout_height="0dp"
+                        android:contentDescription="@string/content_desc_aircraft_photo"/>
 
             </FrameLayout>
 

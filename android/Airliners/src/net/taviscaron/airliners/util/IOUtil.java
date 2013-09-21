@@ -72,7 +72,9 @@ public class IOUtil {
         File nomedia = new File(path, ".nomedia");
         if(!nomedia.exists()) {
             try {
-                nomedia.createNewFile();
+                if(!nomedia.createNewFile()) {
+                    Log.w(TAG, "Can't create .nomedia: " + nomedia);
+                }
             } catch (IOException e) {
                 Log.w(TAG, "Can't create .nomedia: " + nomedia, e);
             }

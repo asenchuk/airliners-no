@@ -7,11 +7,6 @@
     <string name="tab_top_title">TOP</string>
     <string name="tab_search_title">Search</string>
 
-    <!-- search item -->
-    <string name="aircraft_item_aircraft_group_title">Aircraft</string>
-    <string name="aircraft_item_location_date_group_title">Location &amp; Date</string>
-    <string name="aircraft_item_author_group_title">Author</string>
-
     <!-- aircraft info -->
     <string name="aircraft_info_photo_title">Photo</string>
     <string name="aircraft_info_airline_title">Airline</string>
@@ -48,4 +43,8 @@
 
     <string name="search_empty_params_toast">Please fill at least one field!</string>
 
+    <!-- content descriptions -->
+    <string name="content_desc_prev_btn">Previous</string>
+    <string name="content_desc_next_btn">Next</string>
+    <string name="content_desc_aircraft_photo">Aircraft photo</string>
 </resources>

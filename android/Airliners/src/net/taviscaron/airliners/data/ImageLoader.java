@@ -30,7 +30,6 @@ public class ImageLoader {
     public static final String THUMB_CACHE_TAG = "thumb";
     public static final String IMAGE_CACHE_TAG = "image";
 
-    private final Context context;
     private final File cacheBaseDir;
     private final Handler handler;
     private final URLStreamHandler urlStreamHandler;
@@ -46,7 +45,6 @@ public class ImageLoader {
     }
 
     public ImageLoader(Context context, String cacheTag, URLStreamHandler urlStreamHandler) {
-        this.context = context.getApplicationContext();
         this.cacheBaseDir = IOUtil.getExternalCacheDir(context, cacheTag);
         this.handler = new Handler(Looper.getMainLooper());
         this.urlStreamHandler = urlStreamHandler;

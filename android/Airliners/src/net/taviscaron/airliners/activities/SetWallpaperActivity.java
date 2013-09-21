@@ -47,8 +47,9 @@ public class SetWallpaperActivity extends Activity {
                 if(resultCode == RESULT_OK) {
                     setWallpaperImageFromPath(tempFile.getAbsolutePath());
                 }
-                // remove temp file
-                tempFile.delete();
+                if(!tempFile.delete()) {
+                    Log.w(TAG, "Can't delete temp file: " + tempFile.getAbsolutePath());
+                }
                 finish();
                 break;
             default:

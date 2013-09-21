@@ -1,6 +1,6 @@
 package net.taviscaron.airliners.model;
 
-import android.text.TextUtils;
+import net.taviscaron.airliners.util.CommonUtil;
 import net.taviscaron.airliners.util.Validate;
 
 import java.io.Serializable;
@@ -126,17 +126,6 @@ public class SearchParams implements Serializable {
     }
 
     public boolean isEmpty() {
-        boolean empty = true;
-        empty = empty && TextUtils.isEmpty(aircraft);
-        empty = empty && TextUtils.isEmpty(airline);
-        empty = empty && TextUtils.isEmpty(place);
-        empty = empty && TextUtils.isEmpty(country);
-        empty = empty && TextUtils.isEmpty(date);
-        empty = empty && TextUtils.isEmpty(year);
-        empty = empty && TextUtils.isEmpty(reg);
-        empty = empty && TextUtils.isEmpty(cn);
-        empty = empty && TextUtils.isEmpty(code);
-        empty = empty && TextUtils.isEmpty(remark);
-        return empty;
+        return CommonUtil.isAllEmpty(aircraft, airline, place, country, date, year, reg, cn, code, remark);
     }
 }

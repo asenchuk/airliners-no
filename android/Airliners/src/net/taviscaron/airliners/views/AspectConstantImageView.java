@@ -51,12 +51,10 @@ public class AspectConstantImageView extends ImageView {
         super.onSizeChanged(w, h, oldw, oldh);
 
         LayoutParams lp = getLayoutParams();
-        if(lp.width != LayoutParams.MATCH_PARENT && lp.height != LayoutParams.MATCH_PARENT) {
-            // ignore any changes
-        } if(lp.width != LayoutParams.MATCH_PARENT) {
+        if(lp.width != LayoutParams.MATCH_PARENT && lp.height == LayoutParams.MATCH_PARENT) {
             lp.width = (int)(aspectRatio * h);
             setLayoutParams(lp);
-        } else if(lp.height != LayoutParams.MATCH_PARENT) {
+        } else if(lp.height != LayoutParams.MATCH_PARENT && lp.width == LayoutParams.MATCH_PARENT) {
             lp.height = (int)(w / aspectRatio);
             setLayoutParams(lp);
         }
