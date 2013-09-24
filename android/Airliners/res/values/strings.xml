@@ -2,6 +2,9 @@
 <resources>
     <string name="app_name">Airliners</string>
 
+    <!-- buttons -->
+    <string name="button_ok">OK</string>
+
     <!-- tabs -->
     <string name="tab_top15_title">TOP 15</string>
     <string name="tab_top_title">TOP</string>
@@ -43,8 +46,24 @@
 
     <string name="search_empty_params_toast">Please fill at least one field!</string>
 
+    <!-- search no results -->
+    <string name="search_no_results_title">Sorry, no results.</string>
+    <string name="search_no_results_line1">Can\'t find what you\'re looking for?</string>
+    <string name="search_no_results_line2">- Check your spelling.</string>
+    <string name="search_no_results_line3">- Try to describe the objectives in fewer words.</string>
+
+    <!-- search errors -->
+    <string name="search_failed_network_unavailable">Network unavailable. Please check your device settings.</string>
+    <string name="search_failed_service_unavailable">Service is temporarily unavailable. Please try again later.</string>
+
     <!-- content descriptions -->
     <string name="content_desc_prev_btn">Previous</string>
     <string name="content_desc_next_btn">Next</string>
     <string name="content_desc_aircraft_photo">Aircraft photo</string>
+
+    <!-- errors -->
+    <string name="error_network_unavailable">Network unavailable. Please check your device settings.</string>
+    <string name="error_photo_loading">Photo can\'t be loaded at this time. Please try again later.</string>
+    <string name="error_aircraft_loading">Aircraft info can\'t be loaded at this time. Please try again later.</string>
+
 </resources>

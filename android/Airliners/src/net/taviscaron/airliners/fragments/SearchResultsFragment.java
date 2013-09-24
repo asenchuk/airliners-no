@@ -10,6 +10,7 @@ import net.taviscaron.airliners.R;
 import net.taviscaron.airliners.adapters.SearchResultsAdapter;
 import net.taviscaron.airliners.model.AircraftSearchResult;
 import net.taviscaron.airliners.model.SearchParams;
+import net.taviscaron.airliners.util.CommonUtil;
 
 /**
  * Search results fragment
@@ -26,6 +27,7 @@ public class SearchResultsFragment extends Fragment {
         public void showAircraftInfo(String id);
     }
 
+    private View emptyView;
     private ProgressBar progressBar;
     private GridView searchListView;
     private SearchResultsAdapter adapter;
@@ -38,16 +40,22 @@ public class SearchResultsFragment extends Fragment {
         }
 
         public void loadStarted() {
-            if(adapter.getCount() == 0) {
+            if(isResumed() && adapter.getCount() == 0) {
                 searchListView.setVisibility(View.GONE);
                 progressBar.setVisibility(View.VISIBLE);
+                emptyView.setVisibility(View.GONE);
             }
         }
 
-        public void loadFinished() {
-            if(adapter.getCount() == 0) {
-                searchListView.setVisibility(View.VISIBLE);
+        public void loadFinished(boolean success) {
+            if(isResumed()) {
+                searchListView.setVisibility(adapter.isEmpty() ? View.GONE : View.VISIBLE);
                 progressBar.setVisibility(View.GONE);
+                emptyView.setVisibility(adapter.isEmpty() ? View.VISIBLE : View.GONE);
+            }
+
+            if(!success) {
+                searchLoadFailed();
             }
         }
     };
@@ -83,6 +91,15 @@ public class SearchResultsFragment extends Fragment {
         progressBar = (ProgressBar)view.findViewById(R.id.search_progress_view);
         searchListView = (GridView)view.findViewById(R.id.search_results_list_view);
 
+        emptyView = view.findViewById(R.id.search_results_empty);
+        emptyView.setVisibility(adapter.isEmpty() ? View.VISIBLE : View.GONE);
+
+        if(adapter.getLoaderType() != SearchResultsAdapter.LoaderType.SEARCH) {
+            view.findViewById(R.id.search_results_empty_line1).setVisibility(View.GONE);
+            view.findViewById(R.id.search_results_empty_line2).setVisibility(View.GONE);
+            view.findViewById(R.id.search_results_empty_line3).setVisibility(View.GONE);
+        }
+
         searchListView.setAdapter(adapter);
         searchListView.setOnScrollListener(adapter);
 
@@ -95,5 +112,30 @@ public class SearchResultsFragment extends Fragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         adapter.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        progressBar = null;
+        searchListView = null;
+        emptyView = null;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        adapter = null;
+    }
+
+    private void searchLoadFailed() {
+        if(isResumed()) {
+            int messageId = CommonUtil.isNetworkAvailable(getActivity()) ? R.string.search_failed_service_unavailable : R.string.search_failed_network_unavailable;
+            if(adapter.isEmpty()) {
+                AlertDialogFragment.createAlert(getActivity(), messageId).show(getFragmentManager());
+            } else {
+                Toast.makeText(getActivity(), messageId, Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }

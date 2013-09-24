@@ -9,11 +9,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import net.taviscaron.airliners.R;
 import net.taviscaron.airliners.data.AircraftPhotoLoader;
 import net.taviscaron.airliners.data.BaseLoader;
 import net.taviscaron.airliners.data.ImageLoader;
 import net.taviscaron.airliners.model.AircraftPhoto;
+import net.taviscaron.airliners.util.CommonUtil;
 
 /**
  * Aircraft Info Fragment
@@ -82,9 +84,12 @@ public class AircraftInfoFragment extends Fragment {
                 view.findViewById(R.id.aircraft_info_progress_bar).setVisibility(View.GONE);
                 if(obj != null) {
                     aircraftPhoto = obj;
-                    updateView();
                 } else {
                     showLoadingError();
+                }
+
+                if(aircraftPhoto != null) {
+                    updateView();
                 }
             }
         }
@@ -94,13 +99,17 @@ public class AircraftInfoFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        photoLoader = new AircraftPhotoLoader(getActivity());
+        imageLoader = new ImageLoader(getActivity(), ImageLoader.IMAGE_CACHE_TAG);
+
         if(savedInstanceState != null) {
             aircraftPhoto = (AircraftPhoto)savedInstanceState.getSerializable(SAVED_AIRCRAFT_KEY);
             initialAircraftId = savedInstanceState.getString(SAVED_AIRCRAFT_ID_KEY);
-        }
 
-        photoLoader = new AircraftPhotoLoader(getActivity());
-        imageLoader = new ImageLoader(getActivity(), ImageLoader.IMAGE_CACHE_TAG);
+            if (aircraftPhoto == null && initialAircraftId != null) {
+                loadAircraft(initialAircraftId);
+            }
+        }
     }
 
     @Override
@@ -130,8 +139,6 @@ public class AircraftInfoFragment extends Fragment {
 
         if(aircraftPhoto != null) {
             updateView();
-        } else if (initialAircraftId != null) {
-            loadAircraft(initialAircraftId);
         }
     }
 
@@ -195,11 +202,22 @@ public class AircraftInfoFragment extends Fragment {
     }
 
     protected void showLoadingError() {
-        // TODO: impl.
+        int messageId = (CommonUtil.isNetworkAvailable(getActivity())) ? R.string.error_aircraft_loading : R.string.error_network_unavailable;
+        if(aircraftPhoto != null) {
+            Toast.makeText(getActivity(), messageId, Toast.LENGTH_SHORT).show();
+        } else {
+            AlertDialogFragment.createAlert(getActivity(), messageId).show(getFragmentManager());
+        }
     }
 
     protected void showImageLoadingError() {
-        // TODO: impl.
+        if(isResumed()) {
+            if(CommonUtil.isNetworkAvailable(getActivity())) {
+                Toast.makeText(getActivity(), R.string.error_photo_loading, Toast.LENGTH_SHORT).show();
+            } else {
+                AlertDialogFragment.createAlert(getActivity(), R.string.error_network_unavailable).show(getFragmentManager());
+            }
+        }
     }
 
     public String getAircraftPhotoPath() {

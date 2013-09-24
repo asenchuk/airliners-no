@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import net.taviscaron.airliners.R;
 import net.taviscaron.airliners.model.SearchParams;
+import net.taviscaron.airliners.util.CommonUtil;
 import net.taviscaron.airliners.util.UIUtil;
 
 /**
@@ -102,7 +103,9 @@ public class SearchFragment extends Fragment {
         if(activity instanceof OnSearchListener) {
             SearchParams sp = searchParamsFromForm();
             if(!sp.isEmpty()) {
-                ((OnSearchListener)activity).onSearch(sp);
+                if(CommonUtil.isNetworkAvailable(getActivity(), true)) {
+                    ((OnSearchListener)activity).onSearch(sp);
+                }
             } else {
                 Toast.makeText(getActivity(), R.string.search_empty_params_toast, Toast.LENGTH_SHORT).show();
             }

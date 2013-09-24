@@ -32,6 +32,7 @@ public class SearchResultsAdapter extends BaseAdapter implements AbsListView.OnS
     private static final String SEARCH_PARAMS_KEY = "searchParams";
     private static final String RESULTS_KEY = "results";
     private static final String HAS_NEXT_PAGES_KEY = "hasNextPages";
+    private static final String LAST_LOADED_PAGE = "lastLoadedPage";
 
     private Context context;
     private LoaderType loaderType;
@@ -40,6 +41,7 @@ public class SearchResultsAdapter extends BaseAdapter implements AbsListView.OnS
     private SearchLoader searchLoader;
     private List<AircraftSearchResult> results;
     private SearchResultsAdapterListener listener;
+    private int lastLoadedPage;
     private boolean hasNext;
     private boolean isLoading;
 
@@ -50,7 +52,7 @@ public class SearchResultsAdapter extends BaseAdapter implements AbsListView.OnS
     public interface SearchResultsAdapterListener {
         public void searchResultItemThumbClicked(AircraftSearchResult result, int position);
         public void loadStarted();
-        public void loadFinished();
+        public void loadFinished(boolean success);
     }
 
     private SearchLoader.BaseLoaderCallback<SearchParams, SearchResult> searchLoaderListener = new SearchLoader.BaseLoaderCallback<SearchParams, SearchResult>() {
@@ -59,11 +61,10 @@ public class SearchResultsAdapter extends BaseAdapter implements AbsListView.OnS
         }
 
         public void loadFinished(BaseLoader<SearchParams, SearchResult> loader, SearchResult obj) {
-            listener.loadFinished();
-
             isLoading = false;
 
             if(obj != null) {
+                lastLoadedPage = params.getPage();
                 hasNext = obj.getTo() < obj.getTotal();
 
                 AircraftSearchResult[] items = obj.getItems();
@@ -72,6 +73,8 @@ public class SearchResultsAdapter extends BaseAdapter implements AbsListView.OnS
                     notifyDataSetChanged();
                 }
             }
+
+            listener.loadFinished(obj != null);
         }
     };
 
@@ -83,7 +86,7 @@ public class SearchResultsAdapter extends BaseAdapter implements AbsListView.OnS
         this.params = params;
         this.results = new ArrayList<AircraftSearchResult>();
 
-        this.params.setPage(1);
+        this.lastLoadedPage = 1;
         this.params.setLimit(itemsPerPage);
 
         initLoaders();
@@ -97,6 +100,7 @@ public class SearchResultsAdapter extends BaseAdapter implements AbsListView.OnS
         this.params = (SearchParams)savedInstanceState.getSerializable(SEARCH_PARAMS_KEY);
         this.results = new ArrayList<AircraftSearchResult>(Arrays.asList((AircraftSearchResult[])savedInstanceState.getSerializable(RESULTS_KEY)));
 
+        this.lastLoadedPage = savedInstanceState.getInt(LAST_LOADED_PAGE);
         this.hasNext = savedInstanceState.getBoolean(HAS_NEXT_PAGES_KEY);
 
         initLoaders();
@@ -188,7 +192,7 @@ public class SearchResultsAdapter extends BaseAdapter implements AbsListView.OnS
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
         if(hasNext && !isLoading && totalItemCount - firstVisibleItem - visibleItemCount < Math.max(visibleItemCount, params.getLimit() / 2)) {
-            params.setPage(params.getPage() + 1);
+            params.setPage(lastLoadedPage + 1);
             loadResults();
         }
     }
@@ -200,6 +204,7 @@ public class SearchResultsAdapter extends BaseAdapter implements AbsListView.OnS
         bundle.putSerializable(SEARCH_PARAMS_KEY, params);
         bundle.putInt(LOADER_TYPE_KEY, loaderType.ordinal());
         bundle.putBoolean(HAS_NEXT_PAGES_KEY, hasNext);
+        bundle.putInt(LAST_LOADED_PAGE, lastLoadedPage);
     }
 
     public void performInitialLoadIfNeeded() {
@@ -222,6 +227,10 @@ public class SearchResultsAdapter extends BaseAdapter implements AbsListView.OnS
             textView.setVisibility(View.VISIBLE);
             textView.setText(value);
         }
+    }
+
+    public LoaderType getLoaderType() {
+        return loaderType;
     }
 
     private static class ViewHolder {
