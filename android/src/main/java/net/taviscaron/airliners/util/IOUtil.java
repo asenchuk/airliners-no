@@ -46,18 +46,15 @@ public class IOUtil {
 
     public static File getExternalCacheDir(Context context, String subdir) {
         File externalCacheDir = context.getExternalCacheDir();
+
+        if(externalCacheDir == null) {
+            externalCacheDir = context.getCacheDir();
+        }
+
         placeNoMedia(externalCacheDir);
         File cache = new File(externalCacheDir, subdir);
         ensureDirectoryExist(cache);
         return cache;
-    }
-
-    public static File getExternalFilesDir(Context context, String subdir) {
-        File filesBaseDir = context.getExternalFilesDir(null);
-        placeNoMedia(filesBaseDir);
-        File externalFilesDir = new File(filesBaseDir, subdir);
-        ensureDirectoryExist(externalFilesDir);
-        return externalFilesDir;
     }
 
     public static File getTempDir(Context context) {

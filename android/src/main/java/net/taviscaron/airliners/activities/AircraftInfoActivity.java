@@ -3,9 +3,9 @@ package net.taviscaron.airliners.activities;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
+import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import net.taviscaron.airliners.R;
 import net.taviscaron.airliners.fragments.AircraftInfoFragment;
 import net.taviscaron.airliners.model.AircraftPhoto;
@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
  * Shows aircraft information
  * @author Andrei Senchuk
  */
-public class AircraftInfoActivity extends SherlockFragmentActivity implements AircraftInfoFragment.StateListener {
+public class AircraftInfoActivity extends AppCompatActivity implements AircraftInfoFragment.StateListener {
     public static final String AIRCRAFT_INFO_ACTION = "net.taviscaron.airliners.AIRCRAFT_INFO";
     public static final String AIRCRAFT_ID_KEY = "aircraftId";
 
@@ -63,7 +63,7 @@ public class AircraftInfoActivity extends SherlockFragmentActivity implements Ai
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getSupportMenuInflater().inflate(R.menu.aircraft_info_activity_actions, menu);
+        getMenuInflater().inflate(R.menu.aircraft_info_activity_actions, menu);
         return super.onCreateOptionsMenu(menu);
     }
 

@@ -5,8 +5,8 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import net.taviscaron.airliners.R;
 import net.taviscaron.airliners.adapters.SearchResultsAdapter;
 import net.taviscaron.airliners.fragments.SearchFragment;
@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.Stack;
 import java.util.UUID;
 
-public class MainActivity extends SherlockFragmentActivity implements SearchResultsFragment.OnShowAircraftInfoListener, SearchFragment.OnSearchListener {
+public class MainActivity extends ActionBarActivity implements SearchResultsFragment.OnShowAircraftInfoListener, SearchFragment.OnSearchListener {
     private static final String SAVED_TAB_KEY = "savedTab";
     private static final String BACK_STACKS_KEY = "backStacks";
 

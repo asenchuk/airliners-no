@@ -49,3 +49,8 @@ proguard/
 #########
 target/
 gen-external-apklibs/
+
+# Gradle #
+##########
+build/
+.gradle
