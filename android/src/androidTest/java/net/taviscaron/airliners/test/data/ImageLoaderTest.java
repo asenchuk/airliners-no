@@ -24,7 +24,12 @@ public class ImageLoaderTest extends InstrumentationTestCase {
         Context testContext = getInstrumentation().getContext();
         Context targetContext = getInstrumentation().getTargetContext();
 
-        cacheBaseDir = new File(targetContext.getExternalCacheDir(), CACHE_TAG);
+        File cacheDir = targetContext.getExternalCacheDir();
+        if(cacheDir == null) {
+            cacheDir = targetContext.getCacheDir();
+        }
+
+        cacheBaseDir = new File(cacheDir, CACHE_TAG);
 
         // clean cache dir
         TestUtil.deleteRecursively(cacheBaseDir);
