@@ -22,6 +22,11 @@
         <item name="android:singleLine">true</item>
     </style>
 
+    <style name="ActionBar" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+        <item name="homeAsUpIndicator">@drawable/ic_logo</item>
+        <item name="displayOptions">showTitle|showHome|homeAsUp</item>
+    </style>
+
     <style name="AircraftItemAttributeText">
         <item name="android:textColor">#fff</item>
         <item name="android:textColorHighlight">#fff</item>

@@ -40,6 +40,9 @@
                 <data android:pathPattern="/photo/.*/.*"/>
                 <data android:pathPattern="/photo/.*/.*/.*/.*"/>
             </intent-filter>
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.MainActivity"/>
         </activity>
         <activity
                 android:name=".activities.SetWallpaperActivity"
